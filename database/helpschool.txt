@@ -44,10 +44,10 @@ CREATE TABLE helpschool.countries (
 ALTER TABLE helpschool.countries OWNER TO postgres;
 
 --
--- Name: district; Type: TABLE; Schema: helpschool; Owner: postgres
+-- Name: districts; Type: TABLE; Schema: helpschool; Owner: postgres
 --
 
-CREATE TABLE helpschool.district (
+CREATE TABLE helpschool.districts (
     district_id uuid NOT NULL,
     state_id uuid NOT NULL,
     name character varying(512) NOT NULL,
@@ -58,24 +58,7 @@ CREATE TABLE helpschool.district (
 );
 
 
-ALTER TABLE helpschool.district OWNER TO postgres;
-
---
--- Name: school; Type: TABLE; Schema: helpschool; Owner: postgres
---
-
-CREATE TABLE helpschool.school (
-    school_id uuid NOT NULL,
-    district_id uuid NOT NULL,
-    name character varying(512) NOT NULL,
-    govt_id character varying(1024),
-    extra_info jsonb,
-    created_date timestamp with time zone DEFAULT now() NOT NULL,
-    modified_date time with time zone DEFAULT now()
-);
-
-
-ALTER TABLE helpschool.school OWNER TO postgres;
+ALTER TABLE helpschool.districts OWNER TO postgres;
 
 --
 -- Name: school_supplies; Type: TABLE; Schema: helpschool; Owner: postgres
@@ -91,6 +74,23 @@ CREATE TABLE helpschool.school_supplies (
 
 
 ALTER TABLE helpschool.school_supplies OWNER TO postgres;
+
+--
+-- Name: schools; Type: TABLE; Schema: helpschool; Owner: postgres
+--
+
+CREATE TABLE helpschool.schools (
+    school_id uuid NOT NULL,
+    district_id uuid NOT NULL,
+    name character varying(512) NOT NULL,
+    govt_id character varying(1024),
+    extra_info jsonb,
+    created_date timestamp with time zone DEFAULT now() NOT NULL,
+    modified_date time with time zone DEFAULT now()
+);
+
+
+ALTER TABLE helpschool.schools OWNER TO postgres;
 
 --
 -- Name: states; Type: TABLE; Schema: helpschool; Owner: postgres
@@ -143,18 +143,34 @@ ALTER TABLE ONLY helpschool.countries
 
 
 --
--- Name: district district_pkey; Type: CONSTRAINT; Schema: helpschool; Owner: postgres
+-- Name: districts district_pkey; Type: CONSTRAINT; Schema: helpschool; Owner: postgres
 --
 
-ALTER TABLE ONLY helpschool.district
+ALTER TABLE ONLY helpschool.districts
     ADD CONSTRAINT district_pkey PRIMARY KEY (district_id);
 
 
 --
--- Name: school school_pkey; Type: CONSTRAINT; Schema: helpschool; Owner: postgres
+-- Name: states name_country_id; Type: CONSTRAINT; Schema: helpschool; Owner: postgres
 --
 
-ALTER TABLE ONLY helpschool.school
+ALTER TABLE ONLY helpschool.states
+    ADD CONSTRAINT name_country_id UNIQUE (country_id, name);
+
+
+--
+-- Name: districts name_state_id; Type: CONSTRAINT; Schema: helpschool; Owner: postgres
+--
+
+ALTER TABLE ONLY helpschool.districts
+    ADD CONSTRAINT name_state_id UNIQUE (state_id, name);
+
+
+--
+-- Name: schools school_pkey; Type: CONSTRAINT; Schema: helpschool; Owner: postgres
+--
+
+ALTER TABLE ONLY helpschool.schools
     ADD CONSTRAINT school_pkey PRIMARY KEY (school_id);
 
 

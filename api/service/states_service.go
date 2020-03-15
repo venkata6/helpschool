@@ -55,7 +55,7 @@ func (a *StatesServiceInternal) GetStates(w http.ResponseWriter, r *http.Request
 		_ = rowCount.Scan(&count)
 		//checkErr(err)
 	}
-	rows, err := a.db.Query(context.Background(), "select state_id,name,country_id,govt_id,extra_info from helpschool.states")
+	rows, err := a.db.Query(context.Background(), "select name,state_id,country_id,govt_id,extra_info from helpschool.states")
 	defer rows.Close()
 
 	states := make([]response.StatesResponse, count)

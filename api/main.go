@@ -55,12 +55,13 @@ func main() {
 		r.Delete("/", statesService.DeleteStates) // DELETE /countries
 	})
 	//
-	//// RESTy routes for "countries" resource
-	//r.Route("/districts", func(r chi.Router) {
-	//	r.With(paginate).Get("/", GetCountries)
-	//	r.Post("/", CreateCountries)   // POST /countries
-	//	r.Delete("/", DeleteCountries) // DELETE /countries
-	//})
+	//// RESTy routes for "districts" resource
+	districtsService := service.NewDistrictsService(db)
+	r.Route("/districts", func(r chi.Router) {
+		r.With(paginate).Get("/", districtsService.GetDistricts)
+		r.Post("/", districtsService.CreateDistricts)   // POST /countries
+		r.Delete("/", districtsService.DeleteDistricts) // DELETE /countries
+	})
 	//
 	//// RESTy routes for "countries" resource
 	//r.Route("/schools", func(r chi.Router) {
