@@ -15,7 +15,7 @@
 creds/*
 .terraform/*
 *~
-vendor/*
+**/vendor
 vendor
 
 # Binaries for programs and plugins
@@ -54,5 +54,4 @@ vendor/
 
 Gopkg.lock
 Gopkg.toml
-
 
