@@ -40,19 +40,20 @@ func main() {
 	setUpDatabaseConnection()
 
 	// RESTy routes for "countries" resource
-	countryService := service.NewCountryService(db)
+	countryService := service.NewCountriesService(db)
 	r.Route("/countries", func(r chi.Router) {
 		r.With(paginate).Get("/", countryService.GetCountries)
 		r.Post("/", countryService.CreateCountries)   // POST /countries
 		r.Delete("/", countryService.DeleteCountries) // DELETE /countries
 	})
 
-	//// RESTy routes for "countries" resource
-	//r.Route("/states", func(r chi.Router) {
-	//	r.With(paginate).Get("/", GetCountries)
-	//	r.Post("/", CreateCountries)   // POST /countries
-	//	r.Delete("/", DeleteCountries) // DELETE /countries
-	//})
+	statesService := service.NewStatesService(db)
+	//// RESTy routes for "states" resource
+	r.Route("/states", func(r chi.Router) {
+		r.With(paginate).Get("/", statesService.GetStates)
+		r.Post("/", statesService.CreateStates)   // POST /countries
+		r.Delete("/", statesService.DeleteStates) // DELETE /countries
+	})
 	//
 	//// RESTy routes for "countries" resource
 	//r.Route("/districts", func(r chi.Router) {

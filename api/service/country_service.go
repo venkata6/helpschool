@@ -12,23 +12,23 @@ import (
 	"net/http"
 )
 
-type CountryService interface {
+type CountriesService interface {
 	CreateCountries(w http.ResponseWriter, r *http.Request)
 	GetCountries(w http.ResponseWriter, r *http.Request)
 	DeleteCountries(w http.ResponseWriter, r *http.Request)
 }
 
-type CountryServiceInternal struct {
+type CountriesServiceInternal struct {
 	db *pgxpool.Pool
 }
 
-func NewCountryService(db *pgxpool.Pool) CountryService {
-	return &CountryServiceInternal{db: db}
+func NewCountriesService(db *pgxpool.Pool) CountriesService {
+	return &CountriesServiceInternal{db: db}
 }
 
 // CreateCountries persists the posted Article and returns it
 // back to the client as an acknowledgement.
-func (a *CountryServiceInternal) CreateCountries(w http.ResponseWriter, r *http.Request) {
+func (a *CountriesServiceInternal) CreateCountries(w http.ResponseWriter, r *http.Request) {
 	data := &request.CountryRequest{}
 	if err := render.Bind(r, data); err != nil {
 		render.Render(w, r, util.ErrInvalidRequest(err))
@@ -45,7 +45,7 @@ func (a *CountryServiceInternal) CreateCountries(w http.ResponseWriter, r *http.
 	//render.Status(r, http.StatusCreated)
 	//render.Render(w, r, )
 }
-func (a *CountryServiceInternal) GetCountries(w http.ResponseWriter, r *http.Request) {
+func (a *CountriesServiceInternal) GetCountries(w http.ResponseWriter, r *http.Request) {
 
 	var count int
 	rowCount, err := a.db.Query(context.Background(), "select count(*) as count from  helpschool.countries")
@@ -84,7 +84,7 @@ func (a *CountryServiceInternal) GetCountries(w http.ResponseWriter, r *http.Req
 
 // DeleteCountries searches the Articles data for a matching article.
 // It's just a stub, but you get the idea.
-func (a *CountryServiceInternal) DeleteCountries(w http.ResponseWriter, r *http.Request) {
+func (a *CountriesServiceInternal) DeleteCountries(w http.ResponseWriter, r *http.Request) {
 	//render.RenderList(w, r, NewCountriesListResponse(articles))
 }
 
