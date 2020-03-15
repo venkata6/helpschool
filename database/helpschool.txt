@@ -82,12 +82,11 @@ ALTER TABLE helpschool.school OWNER TO postgres;
 --
 
 CREATE TABLE helpschool.school_supplies (
-    id bigint NOT NULL,
+    school_id uuid NOT NULL,
     supply_id uuid NOT NULL,
-    title character varying(1024) NOT NULL,
-    url character varying(2048) NOT NULL,
-    description character varying(2048),
-    quantity integer NOT NULL
+    quantity integer DEFAULT 0 NOT NULL,
+    created_date timestamp with time zone DEFAULT now() NOT NULL,
+    modified_date timestamp with time zone DEFAULT now()
 );
 
 
@@ -109,6 +108,23 @@ CREATE TABLE helpschool.states (
 
 
 ALTER TABLE helpschool.states OWNER TO postgres;
+
+--
+-- Name: supplies; Type: TABLE; Schema: helpschool; Owner: postgres
+--
+
+CREATE TABLE helpschool.supplies (
+    supply_id uuid NOT NULL,
+    title character varying(1024) NOT NULL,
+    url character varying(4096) NOT NULL,
+    description character varying(4096),
+    extra_info jsonb,
+    created_date timestamp with time zone NOT NULL,
+    modified_date timestamp with time zone
+);
+
+
+ALTER TABLE helpschool.supplies OWNER TO postgres;
 
 --
 -- Name: countries countries_pkey; Type: CONSTRAINT; Schema: helpschool; Owner: postgres
@@ -147,7 +163,7 @@ ALTER TABLE ONLY helpschool.school
 --
 
 ALTER TABLE ONLY helpschool.school_supplies
-    ADD CONSTRAINT school_supplies_pkey PRIMARY KEY (id);
+    ADD CONSTRAINT school_supplies_pkey PRIMARY KEY (school_id, supply_id);
 
 
 --
