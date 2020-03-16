@@ -121,8 +121,9 @@ CREATE TABLE helpschool.supplies (
     url character varying(4096) NOT NULL,
     description character varying(4096),
     extra_info jsonb,
-    created_date timestamp with time zone NOT NULL,
-    modified_date timestamp with time zone
+    created_date timestamp with time zone DEFAULT now() NOT NULL,
+    modified_date timestamp with time zone DEFAULT now(),
+    country_id uuid NOT NULL
 );
 
 
