@@ -39,11 +39,15 @@ func (a *StatesServiceInternal) CreateStates(w http.ResponseWriter, r *http.Requ
 		render.Render(w, r, util.ErrInvalidRequest(errors.New("empty CountryId")))
 		return
 	}
-	id,_ := uuid.Parse(data.CountryId)
+	id, _ := uuid.Parse(data.CountryId)
+	if len(data.CountryId) == 0 {
+		render.Render(w, r, util.ErrInvalidRequest(errors.New("empty CountryId")))
+		return
+	}
 	if _, err := a.db.Exec(context.Background(),
 		`INSERT INTO helpschool.states( state_id,name,country_id,govt_id,extra_info)
 					VALUES ( $1, $2, $3, $4, $5)`, uuid.New(), data.Name,
-					id,data.GovtId,data.ExtraInfo); err == nil {
+		id, data.GovtId, data.ExtraInfo); err == nil {
 		w.WriteHeader(http.StatusOK)
 	} else {
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
@@ -73,7 +77,7 @@ func (a *StatesServiceInternal) GetStates(w http.ResponseWriter, r *http.Request
 		var govtId string
 		var extraInfo string
 
-		err = rows.Scan(&name,&stateId, &countryId,&govtId,&extraInfo)
+		err = rows.Scan(&name, &stateId, &countryId, &govtId, &extraInfo)
 		states[i].States = &dto.States{} // allocate space
 		states[i].Name = name
 		states[i].StateId = stateId

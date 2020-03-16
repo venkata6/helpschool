@@ -63,12 +63,20 @@ func main() {
 		r.Delete("/", districtsService.DeleteDistricts) // DELETE /countries
 	})
 	//
-	//// RESTy routes for "countries" resource
+	//// RESTy routes for "schools" resource
 	schoolsService := service.NewSchoolsService(db)
 	r.Route("/schools", func(r chi.Router) {
 		r.With(paginate).Get("/", schoolsService.GetSchools)
 		r.Post("/", schoolsService.CreateSchools)   // POST /countries
 		r.Delete("/", schoolsService.DeleteSchools) // DELETE /countries
+	})
+
+	//// RESTy routes for "supplies" resource
+	suppliesService := service.NewSuppliesService(db)
+	r.Route("/supplies", func(r chi.Router) {
+		r.With(paginate).Get("/", suppliesService.GetSupplies)
+		r.Post("/", suppliesService.CreateSupplies)   // POST /countries
+		r.Delete("/", suppliesService.DeleteSupplies) // DELETE /countries
 	})
 
 	// Mount the admin sub-router, which btw is the same as:
