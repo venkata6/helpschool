@@ -83,10 +83,12 @@ CREATE TABLE helpschool.schools (
     school_id uuid NOT NULL,
     district_id uuid NOT NULL,
     name character varying(512) NOT NULL,
-    govt_id character varying(1024),
+    address character varying(4096),
+    govt_id character varying(2048),
     extra_info jsonb,
     created_date timestamp with time zone DEFAULT now() NOT NULL,
-    modified_date time with time zone DEFAULT now()
+    modified_date timestamp with time zone DEFAULT now(),
+    place character varying(512)
 );
 
 
@@ -156,6 +158,14 @@ ALTER TABLE ONLY helpschool.districts
 
 ALTER TABLE ONLY helpschool.states
     ADD CONSTRAINT name_country_id UNIQUE (country_id, name);
+
+
+--
+-- Name: schools name_place_address_district_id; Type: CONSTRAINT; Schema: helpschool; Owner: postgres
+--
+
+ALTER TABLE ONLY helpschool.schools
+    ADD CONSTRAINT name_place_address_district_id UNIQUE (district_id, name, place, address);
 
 
 --

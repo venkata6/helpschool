@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"errors"
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v4/pgxpool"
@@ -32,6 +33,10 @@ func (a *StatesServiceInternal) CreateStates(w http.ResponseWriter, r *http.Requ
 	data := &request.StatesRequest{}
 	if err := render.Bind(r, data); err != nil {
 		render.Render(w, r, util.ErrInvalidRequest(err))
+		return
+	}
+	if len(data.CountryId) == 0 {
+		render.Render(w, r, util.ErrInvalidRequest(errors.New("empty CountryId")))
 		return
 	}
 	id,_ := uuid.Parse(data.CountryId)
