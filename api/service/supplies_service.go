@@ -40,12 +40,9 @@ func (a *SuppliesServiceInternal) CreateSupplies(w http.ResponseWriter, r *http.
 		return
 	}
 	id, _ := uuid.Parse(data.CountryId)
-	if len(data.CountryId) == 0 {
-		render.Render(w, r, util.ErrInvalidRequest(errors.New("empty CountryId")))
-		return
-	}
+
 	if _, err := a.db.Exec(context.Background(),
-		`INSERT INTO helpschool.Supplies( supply_id,title,country_id,url,description,extra_info)
+		`INSERT INTO helpschool.supplies( supply_id,title,country_id,url,description,extra_info)
 					VALUES ( $1, $2, $3, $4, $5,$6)`, uuid.New(), data.Title, id,
 		data.Url, data.Description, data.ExtraInfo); err == nil {
 		w.WriteHeader(http.StatusOK)
@@ -59,12 +56,12 @@ func (a *SuppliesServiceInternal) CreateSupplies(w http.ResponseWriter, r *http.
 func (a *SuppliesServiceInternal) GetSupplies(w http.ResponseWriter, r *http.Request) {
 
 	var count int
-	rowCount, err := a.db.Query(context.Background(), "select count(*) as count from  helpschool.Supplies")
+	rowCount, err := a.db.Query(context.Background(), "select count(*) as count from  helpschool.supplies")
 	for rowCount.Next() {
 		_ = rowCount.Scan(&count)
 		//checkErr(err)
 	}
-	rows, err := a.db.Query(context.Background(), "select supply_id,title,country_id,url,description,extra_info from helpschool.Supplies")
+	rows, err := a.db.Query(context.Background(), "select supply_id,title,country_id,url,description,extra_info from helpschool.supplies")
 	defer rows.Close()
 
 	supplies := make([]response.SuppliesResponse, count)
@@ -106,9 +103,9 @@ func (a *SuppliesServiceInternal) DeleteSupplies(w http.ResponseWriter, r *http.
 	//render.RenderList(w, r, NewCountriesListResponse(articles))
 }
 
-func NewSuppliesListResponse(Supplies []response.SuppliesResponse) []render.Renderer {
+func NewSuppliesListResponse(supplies []response.SuppliesResponse) []render.Renderer {
 	list := []render.Renderer{}
-	for _, supply := range Supplies {
+	for _, supply := range supplies {
 		list = append(list, supply)
 	}
 	return list

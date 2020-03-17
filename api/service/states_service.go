@@ -40,10 +40,6 @@ func (a *StatesServiceInternal) CreateStates(w http.ResponseWriter, r *http.Requ
 		return
 	}
 	id, _ := uuid.Parse(data.CountryId)
-	if len(data.CountryId) == 0 {
-		render.Render(w, r, util.ErrInvalidRequest(errors.New("empty CountryId")))
-		return
-	}
 	if _, err := a.db.Exec(context.Background(),
 		`INSERT INTO helpschool.states( state_id,name,country_id,govt_id,extra_info)
 					VALUES ( $1, $2, $3, $4, $5)`, uuid.New(), data.Name,
