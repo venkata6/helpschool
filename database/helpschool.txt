@@ -69,7 +69,9 @@ CREATE TABLE helpschool.school_supplies (
     supply_id uuid NOT NULL,
     quantity integer DEFAULT 0 NOT NULL,
     created_date timestamp with time zone DEFAULT now() NOT NULL,
-    modified_date timestamp with time zone DEFAULT now()
+    modified_date timestamp with time zone DEFAULT now(),
+    fulfilled_count integer DEFAULT 0,
+    extra_info jsonb
 );
 
 
@@ -202,10 +204,26 @@ ALTER TABLE ONLY helpschool.states
 
 
 --
+-- Name: supplies supplies_pkey; Type: CONSTRAINT; Schema: helpschool; Owner: postgres
+--
+
+ALTER TABLE ONLY helpschool.supplies
+    ADD CONSTRAINT supplies_pkey PRIMARY KEY (supply_id);
+
+
+--
 -- Name: fki_countries_province; Type: INDEX; Schema: helpschool; Owner: postgres
 --
 
 CREATE INDEX fki_countries_province ON helpschool.states USING btree (country_id);
+
+
+--
+-- Name: supplies country_country_id; Type: FK CONSTRAINT; Schema: helpschool; Owner: postgres
+--
+
+ALTER TABLE ONLY helpschool.supplies
+    ADD CONSTRAINT country_country_id FOREIGN KEY (country_id) REFERENCES helpschool.countries(country_id) ON UPDATE SET NULL ON DELETE SET NULL NOT VALID;
 
 
 --
@@ -214,6 +232,30 @@ CREATE INDEX fki_countries_province ON helpschool.states USING btree (country_id
 
 ALTER TABLE ONLY helpschool.states
     ADD CONSTRAINT country_state FOREIGN KEY (country_id) REFERENCES helpschool.countries(country_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+
+--
+-- Name: schools district_district_id; Type: FK CONSTRAINT; Schema: helpschool; Owner: postgres
+--
+
+ALTER TABLE ONLY helpschool.schools
+    ADD CONSTRAINT district_district_id FOREIGN KEY (district_id) REFERENCES helpschool.districts(district_id) ON UPDATE SET NULL ON DELETE SET NULL NOT VALID;
+
+
+--
+-- Name: school_supplies schools_school_id; Type: FK CONSTRAINT; Schema: helpschool; Owner: postgres
+--
+
+ALTER TABLE ONLY helpschool.school_supplies
+    ADD CONSTRAINT schools_school_id FOREIGN KEY (school_id) REFERENCES helpschool.schools(school_id) ON UPDATE SET NULL ON DELETE SET NULL NOT VALID;
+
+
+--
+-- Name: school_supplies supplies_supply_id; Type: FK CONSTRAINT; Schema: helpschool; Owner: postgres
+--
+
+ALTER TABLE ONLY helpschool.school_supplies
+    ADD CONSTRAINT supplies_supply_id FOREIGN KEY (supply_id) REFERENCES helpschool.supplies(supply_id) ON UPDATE SET NULL ON DELETE SET NULL NOT VALID;
 
 
 --
