@@ -11,6 +11,7 @@ import (
 	"github.com/venkata6/helpschool/api/response"
 	"github.com/venkata6/helpschool/api/util"
 	"net/http"
+	"strconv"
 )
 
 type SchoolSuppliesService interface {
@@ -67,7 +68,7 @@ func (a *SchoolSuppliesServiceInternal) GetSchoolSupplies(w http.ResponseWriter,
 		_ = rowCount.Scan(&count)
 		//checkErr(err)
 	}
-	rows, err := a.db.Query(context.Background(), "select schoolId,supply_id,quantity,fulfilled_count,extra_info from helpschool.school_supplies")
+	rows, err := a.db.Query(context.Background(), "select school_id,supply_id,quantity,fulfilled_count,extra_info from helpschool.school_supplies")
 	defer rows.Close()
 
 	schoolSupplies := make([]response.SchoolSuppliesResponse, count)
@@ -76,16 +77,16 @@ func (a *SchoolSuppliesServiceInternal) GetSchoolSupplies(w http.ResponseWriter,
 		// Read
 		var supplyId string
 		var schoolId string
-		var quantity string
-		var fulfilledCount string
+		var quantity int
+		var fulfilledCount int
 		var extraInfo string
 
 		err = rows.Scan(&supplyId, &schoolId, &quantity, &fulfilledCount, &extraInfo)
 		schoolSupplies[i].SchoolSupplies = &dto.SchoolSupplies{} // allocate space
 		schoolSupplies[i].SupplyId = supplyId
 		schoolSupplies[i].SchoolId = schoolId
-		schoolSupplies[i].Quantity = quantity
-		schoolSupplies[i].FulfilledCount = fulfilledCount
+		schoolSupplies[i].Quantity = strconv.Itoa(quantity)
+		schoolSupplies[i].FulfilledCount = strconv.Itoa(fulfilledCount)
 		schoolSupplies[i].ExtraInfo = extraInfo
 
 		if err != nil {

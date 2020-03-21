@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"errors"
+	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v4/pgxpool"
@@ -55,44 +56,54 @@ func (a *DistrictsServiceInternal) CreateDistricts(w http.ResponseWriter, r *htt
 func (a *DistrictsServiceInternal) GetDistricts(w http.ResponseWriter, r *http.Request) {
 
 	var count int
-	rowCount, err := a.db.Query(context.Background(), "select count(*) as count from  helpschool.districts")
+	stateId := chi.URLParam(r, "stateId")
+
+	rowCount, err := a.db.Query(context.Background(), "select count(*) as count from  helpschool.districts where state_id = $1",stateId)
 	for rowCount.Next() {
 		_ = rowCount.Scan(&count)
 		//checkErr(err)
 	}
-	rows, err := a.db.Query(context.Background(), "select name,district_id,state_id,govt_id,extra_info from helpschool.districts")
-	defer rows.Close()
+	if count > 0 && err != nil {
+		rows, err := a.db.Query(context.Background(), "select name,district_id,state_id,govt_id,extra_info from helpschool.districts where state_id = $1", stateId)
+		defer rows.Close()
 
-	districts := make([]response.DistrictsResponse, count)
-	i := 0
-	for rows.Next() {
-		// Read
-		var name string
-		var districtId string
-		var stateId string
-		var govtId string
-		var extraInfo string
+		districts := make([]response.DistrictsResponse, count)
+		i := 0
+		for rows.Next() {
+			// Read
+			var name string
+			var districtId string
+			var stateId string
+			var govtId string
+			var extraInfo string
 
-		err = rows.Scan(&name,&districtId,&stateId, &govtId,&extraInfo)
-		districts[i].Districts = &dto.Districts{} // allocate space
-		districts[i].Name = name
-		districts[i].DistrictId = districtId
-		districts[i].StateId = stateId
-		districts[i].GovtId = govtId
-		districts[i].ExtraInfo = extraInfo
+			err = rows.Scan(&name, &districtId, &stateId, &govtId, &extraInfo)
+			districts[i].Districts = &dto.Districts{} // allocate space
+			districts[i].Name = name
+			districts[i].DistrictId = districtId
+			districts[i].StateId = stateId
+			districts[i].GovtId = govtId
+			districts[i].ExtraInfo = extraInfo
 
-		if err != nil {
+			if err != nil {
+				return
+			}
+			i++
+		}
+		// Any errors encountered by rows.Next or rows.Scan will be returned here
+		if rows.Err() != nil {
 			return
 		}
-		i++
-	}
-	// Any errors encountered by rows.Next or rows.Scan will be returned here
-	if rows.Err() != nil {
-		return
-	}
-	if err := render.RenderList(w, r, NewDistrictsListResponse(districts)); err != nil {
-		render.Render(w, r, util.ErrRender(err))
-		return
+
+		if err := render.RenderList(w, r, NewDistrictsListResponse(districts)); err != nil {
+			render.Render(w, r, util.ErrRender(err))
+			return
+		}
+	} else {
+		if err := render.RenderList(w, r, NewDistrictsListResponse(nil)); err != nil {
+			render.Render(w, r, util.ErrRender(err))
+			return
+		}
 	}
 }
 

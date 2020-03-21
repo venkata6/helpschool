@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
+	"github.com/go-chi/cors"
 	"github.com/go-chi/docgen"
 	"github.com/go-chi/render"
 	_ "github.com/jackc/pgx/v4"
@@ -36,12 +37,23 @@ func main() {
 	r.Use(middleware.URLFormat)
 	r.Use(render.SetContentType(render.ContentTypeJSON))
 
+	//add CORS middleware
+	cors := cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+		AllowCredentials: true,
+		MaxAge:           300, // Maximum value not ignored by any of major browsers
+	})
+	r.Use(cors.Handler)
+
+
 	//connect to the database and setup the connection pool for services to use
 	setUpDatabaseConnection()
 
 	// RESTy routes for "countries" resource
 	countryService := service.NewCountriesService(db)
-	r.Route("/countries", func(r chi.Router) {
+	r.Route("/api/countries", func(r chi.Router) {
 		r.With(paginate).Get("/", countryService.GetCountries)
 		r.Post("/", countryService.CreateCountries)   // POST /countries
 		r.Delete("/", countryService.DeleteCountries) // DELETE /countries
@@ -49,7 +61,7 @@ func main() {
 
 	statesService := service.NewStatesService(db)
 	//// RESTy routes for "states" resource
-	r.Route("/states", func(r chi.Router) {
+	r.Route("/api/states", func(r chi.Router) {
 		r.With(paginate).Get("/", statesService.GetStates)
 		r.Post("/", statesService.CreateStates)   // POST /countries
 		r.Delete("/", statesService.DeleteStates) // DELETE /countries
@@ -57,15 +69,15 @@ func main() {
 	//
 	//// RESTy routes for "districts" resource
 	districtsService := service.NewDistrictsService(db)
-	r.Route("/districts", func(r chi.Router) {
-		r.With(paginate).Get("/", districtsService.GetDistricts)
+	r.Route("/api/districts", func(r chi.Router) {
+		r.With(paginate).Get("/state/{stateId}", districtsService.GetDistricts)
 		r.Post("/", districtsService.CreateDistricts)   // POST /countries
 		r.Delete("/", districtsService.DeleteDistricts) // DELETE /countries
 	})
 	//
 	//// RESTy routes for "schools" resource
 	schoolsService := service.NewSchoolsService(db)
-	r.Route("/schools", func(r chi.Router) {
+	r.Route("/api/schools", func(r chi.Router) {
 		r.With(paginate).Get("/", schoolsService.GetSchools)
 		r.Post("/", schoolsService.CreateSchools)   // POST /countries
 		r.Delete("/", schoolsService.DeleteSchools) // DELETE /countries
@@ -73,7 +85,7 @@ func main() {
 
 	//// RESTy routes for "supplies" resource
 	suppliesService := service.NewSuppliesService(db)
-	r.Route("/supplies", func(r chi.Router) {
+	r.Route("/api/supplies", func(r chi.Router) {
 		r.With(paginate).Get("/", suppliesService.GetSupplies)
 		r.Post("/", suppliesService.CreateSupplies)   // POST /countries
 		r.Delete("/", suppliesService.DeleteSupplies) // DELETE /countries
@@ -81,7 +93,7 @@ func main() {
 
 	//// RESTy routes for "supplies" resource
 	schoolSuppliesService := service.NewSchoolSuppliesService(db)
-	r.Route("/school/supplies", func(r chi.Router) {
+	r.Route("/api/school/supplies", func(r chi.Router) {
 		r.With(paginate).Get("/", schoolSuppliesService.GetSchoolSupplies)
 		r.Post("/", schoolSuppliesService.CreateSchoolSupplies)   // POST /countries
 		r.Delete("/", schoolSuppliesService.DeleteSchoolSupplies) // DELETE /countries
