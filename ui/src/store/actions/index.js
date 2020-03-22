@@ -2,11 +2,14 @@ import axios from 'axios';
 export const GET_ALL_PRODUCTS = '[SCHOOL APP] GET ALL PRODUCTS';
 export const GET_ALL_STATES = '[SCHOOL APP] GET ALL STATES';
 export const GET_DISTS_FROM_STATE = '[SCHOOL APP] GET DISTS FROM STATE';
-export const GET_PRODUCTS_LIST_FROM_DIST = '[SCHOOL APP] GET PRODUCTS LIST FROM DIST';
+export const GET_SCHOOLS_FROM_DIST = '[SCHOOL APP] GET SCHOOLS FROM DIST';
 export const GET_PRODUCTS_GROUP = '[SCHOOL APP] GET PRODUCTS GROUP';
 
+const options = {
+    headers: {'Access-Control-Allow-Origin': '*'}
+  };
 export function getAllProducts() {
-    const request = axios.get('/api/school/getAllProducts');
+    const request = axios.get('http://localhost:3333/api/schools/supplies');
     console.log('request=', request);
 
     return (dispatch) =>
@@ -18,7 +21,8 @@ export function getAllProducts() {
         );
 }
 export function getAllStates() {
-    const request = axios.get('/api/school/getStates');
+    //const request = axios.get('/api/school/getStates');
+    const request = axios.get('http://localhost:3333/api/states');
     console.log('request=', request);
 
     return (dispatch) =>
@@ -31,7 +35,10 @@ export function getAllStates() {
 }
 
 export function getDistsFromState(params) {
-    const request = axios.get('/api/school/getDists', {params});
+   
+//    const request = axios.get('http://localhost:3333/api/districts/state/', {params});
+    const request = axios.get('http://localhost:3333/api/districts/state/'+params.state);
+
 
     return (dispatch) =>
         request.then((response) => {
@@ -43,14 +50,16 @@ export function getDistsFromState(params) {
         );
 }
 
-export function getProductsListFromDist(params) {
-    const request = axios.get('/api/school/getProductsListFromDist', {params});
+export function getSchoolsListFromDist(params) {
+    //console.log("hello world before calling backend")
+    //console.log(params)
+    const request = axios.get('http://localhost:3333/api/schools/district/'+ params.dist);
 
     return (dispatch) =>
         request.then((response) => {
             console.log('result=', response);
                 dispatch({
-                    type: GET_PRODUCTS_LIST_FROM_DIST,
+                    type: GET_SCHOOLS_FROM_DIST,
                     payload: response.data
                 })
             }
@@ -58,7 +67,7 @@ export function getProductsListFromDist(params) {
 }
 
 export function getProductsGroup(params) {
-    const request = axios.get('/api/school/getProductsGroup', {params});
+    const request = axios.get('http://localhost:3333/api/school/supplies', {params});
 
     return (dispatch) =>
         request.then((response) => {

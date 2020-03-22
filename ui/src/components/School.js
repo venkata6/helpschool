@@ -11,7 +11,7 @@ function School() {
     const dispatch = useDispatch();
     const states = useSelector(({schoolReducer}) => schoolReducer.states);
     const dists = useSelector(({schoolReducer}) => schoolReducer.dists);
-    const productsList = useSelector(({schoolReducer}) => schoolReducer.productsList);
+    const schoolsList = useSelector(({schoolReducer}) => schoolReducer.schoolsList);
     const productsGroup = useSelector(({schoolReducer}) => schoolReducer.productsGroup);
     const [activeSchoolIndex, setActiveSchoolIndex] = useState(-1);
 
@@ -26,12 +26,16 @@ function School() {
 
     useEffect(() => {
         if(state!==-1)
+            //console.log("hello world - use effect")
+            //console.log(state)
             dispatch(Actions.getDistsFromState({state}));
     }, [dispatch, state]);
 
     useEffect(() => {
         if(dist!==-1)
-            dispatch(Actions.getProductsListFromDist({dist}));
+            //console.log("hello world - use effect - ")
+            //console.log(dist)
+            dispatch(Actions.getSchoolsListFromDist({dist}));
     }, [dispatch, dist]);
 
     useEffect(() => {
@@ -41,6 +45,7 @@ function School() {
 
     function handleState(event)
     {
+        //console.log("handle state ", event.target.value)
         setState(event.target.value);
         setDist(-1);
     }
@@ -48,7 +53,7 @@ function School() {
     function handleDist(event)
     {
         setDist(event.target.value);
-        setProductGroupId(0);
+        setProductGroupId(0); 
         setActiveSchoolIndex(0)
     }
 
@@ -80,7 +85,7 @@ function School() {
                             >
                                 <option value={-1}>Select a state</option>
                                 {states && states.length>0 && states.map((state, index)=>(
-                                    <option key={index} value={state.value}>{state.name}</option>
+                                    <option key={index} value={state.state_id}>{state.name}</option>
                                 ))}
                             </Form.Control>
                         </Form.Group>
@@ -93,7 +98,7 @@ function School() {
                             >
                                 <option value={-1}>Select a dist</option>
                                 {dists && dists.length>0 && dists.map((dist, index)=>(
-                                    <option key={index} value={dist.value}>{dist.name}</option>
+                                    <option key={index} value={dist.district_id}>{dist.name}</option>
                                 ))}
                             </Form.Control>
                         </Form.Group>
@@ -101,11 +106,11 @@ function School() {
                 </Row>
                 <Row>
                     <Col sm={4} xs={12} className="schoolWrap">
-                        {productsList && productsList.length>0 && (
+                        {schoolsList && schoolsList.length>0 && (
                             <div className="card block-18 color-3 p-2">
 
                                 <ListGroup variant="flush">
-                                    {productsList && productsList.length>0 && productsList.map((list, index)=>(
+                                    {schoolsList && schoolsList.length>0 && schoolsList.map((list, index)=>(
                                         <ListGroup.Item key={index}  active={index===activeSchoolIndex}
                                                         onClick={()=>handleProductList(list.id, index)}
                                                         style={{background: 'transparent', cursor: 'pointer', color: 'black'}}>{list.label}</ListGroup.Item>

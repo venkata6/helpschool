@@ -103,10 +103,11 @@ footer ul {
   background-color: #f86f2d!important;
   border-color: #f86f2d;
   border-radius: 4px!important;
+  font-size: 12px;
 }
 
 .detailWrap th, .detailWrap td{
-  font-size: 13px;
+  font-size: 12px;
   vertical-align: middle;
 }
 .detailWrap th:first-child, .detailWrap td:first-child{
