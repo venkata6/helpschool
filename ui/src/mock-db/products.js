@@ -174,26 +174,26 @@ const schoolsDB = {
 
 };
 
-mock.onGet('/api/school/getStates').reply((config) => {
-    return [200, schoolsDB.states];
-});
+// mock.onGet('/api/school/getStates').reply((config) => {
+//     return [200, schoolsDB.states];
+// });
 
-mock.onGet('/api/school/getAllProducts').reply((config) => {
-    return [200, schoolsDB.productsDetails];
-});
+// mock.onGet('/api/school/getAllProducts').reply((config) => {
+//     return [200, schoolsDB.productsDetails];
+// });
 
-mock.onGet('/api/school/getDists').reply((request) => {
-    const {state} = request.params;
+// mock.onGet('/api/school/getDists').reply((request) => {
+//     const {state} = request.params;
 
-    return [200, schoolsDB.dists.filter(dist=>dist.state===state)];
-});
-mock.onGet('/api/school/getProductsListFromDist').reply((request) => {
-    const {dist} = request.params;
+//     return [200, schoolsDB.dists.filter(dist=>dist.state===state)];
+// });
+// mock.onGet('/api/school/getProductsListFromDist').reply((request) => {
+//     const {dist} = request.params;
 
-    return [200, schoolsDB.productsList.filter(product=>product.dist===dist)];
-});
-mock.onGet('/api/school/getProductsGroup').reply((request) => {
-    const {groupId, dist} = request.params;
+//     return [200, schoolsDB.productsList.filter(product=>product.dist===dist)];
+// });
+// mock.onGet('/api/school/getProductsGroup').reply((request) => {
+//     const {groupId, dist} = request.params;
 
-    return [200, schoolsDB.productsDetails.filter(product=>product.parentId===groupId && product.dist===dist)];
-});
+//     return [200, schoolsDB.productsDetails.filter(product=>product.parentId===groupId && product.dist===dist)];
+// });

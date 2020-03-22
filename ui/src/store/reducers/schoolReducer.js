@@ -4,7 +4,7 @@ const initialState ={
     states: [],
     allProducts: [],
     dists: [],
-    productsList: [],
+    schoolsList: [],
     productsGroup: [],
 };
 
@@ -17,15 +17,32 @@ const schoolReducer = function (state = initialState, action) {
             return {...state,  states: action.payload}
         }
         case Actions.GET_DISTS_FROM_STATE: {
-            return {...state,  dists: action.payload, productsList: [], productsGroup: []}
+            //console.log("school reducer - GET_DISTS_FROM_STATE")
+            //console.log(state)
+            return {...state,  dists: action.payload, schoolsList: [], productsGroup: []}
         }
-        case Actions.GET_PRODUCTS_LIST_FROM_DIST: {
-            return {...state,  productsList: action.payload, productsGroup: []}
+        case Actions.GET_SCHOOLS_FROM_DIST: {
+            //console.log("School reducer - GET_SCHOOLS_FROM_DIST - ",action.payload[0].name)
+            if ( action.payload.length > 0) {
+                var schoolListFromBackend = [];
+                for ( var index = 0; index < action.payload.length; index++) {
+                    schoolListFromBackend.push(
+                       {label: action.payload[index].name + "," + action.payload[index].place, 
+                                schoolId:action.payload[index].school_id , id: index},
+                    )
+                }
+                return {...state,  schoolsList: schoolListFromBackend, productsGroup: []}
+            } else {
+                return {...state,  schoolsList: action.payload, productsGroup: []}
+            }
+  
         }
         case Actions.GET_PRODUCTS_GROUP: {
             return {...state,  productsGroup: action.payload}
         }
         default:
+            console.log("school reducer - default")
+            console.log(state)
             return state;
     }
 };
