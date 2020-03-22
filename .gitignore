@@ -15,7 +15,8 @@
 creds/*
 .terraform/*
 *~
-vendor/*
+**/vendor
+vendor
 
 # Binaries for programs and plugins
 *.exe
@@ -48,8 +49,9 @@ vendor/*
 # Dependency directories (remove the comment below to include it)
 vendor/
 *vendor*/
+/api/vendor/*
+/api/*vendor*/
 
 Gopkg.lock
 Gopkg.toml
-
 
