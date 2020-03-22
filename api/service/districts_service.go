@@ -40,11 +40,11 @@ func (a *DistrictsServiceInternal) CreateDistricts(w http.ResponseWriter, r *htt
 		render.Render(w, r, util.ErrInvalidRequest(errors.New("empty stateId")))
 		return
 	}
-	stateId,_ := uuid.Parse(data.StateId)
+	stateId, _ := uuid.Parse(data.StateId)
 	if _, err := a.db.Exec(context.Background(),
 		`INSERT INTO helpschool.districts( district_id,name,state_id,govt_id,extra_info)
 					VALUES ( $1, $2, $3, $4, $5)`, uuid.New(), data.Name,
-					stateId,data.GovtId,data.ExtraInfo); err == nil {
+		stateId, data.GovtId, data.ExtraInfo); err == nil {
 		w.WriteHeader(http.StatusOK)
 	} else {
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
@@ -58,12 +58,12 @@ func (a *DistrictsServiceInternal) GetDistricts(w http.ResponseWriter, r *http.R
 	var count int
 	stateId := chi.URLParam(r, "stateId")
 
-	rowCount, err := a.db.Query(context.Background(), "select count(*) as count from  helpschool.districts where state_id = $1",stateId)
+	rowCount, err := a.db.Query(context.Background(), "select count(*) as count from  helpschool.districts where state_id = $1", stateId)
 	for rowCount.Next() {
 		_ = rowCount.Scan(&count)
 		//checkErr(err)
 	}
-	if count > 0 && err != nil {
+	if count > 0 && err == nil {
 		rows, err := a.db.Query(context.Background(), "select name,district_id,state_id,govt_id,extra_info from helpschool.districts where state_id = $1", stateId)
 		defer rows.Close()
 

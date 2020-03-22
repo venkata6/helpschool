@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"errors"
+	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v4/pgxpool"
@@ -55,12 +56,15 @@ func (a *SchoolsServiceInternal) CreateSchools(w http.ResponseWriter, r *http.Re
 func (a *SchoolsServiceInternal) GetSchools(w http.ResponseWriter, r *http.Request) {
 
 	var count int
-	rowCount, err := a.db.Query(context.Background(), "select count(*) as count from  helpschool.schools")
+	districtId := chi.URLParam(r, "districtId")
+	rowCount, err := a.db.Query(context.Background(), "select count(*) as count from  helpschool.schools " +
+									"where district_id = $1",districtId)
 	for rowCount.Next() {
 		_ = rowCount.Scan(&count)
 		//checkErr(err)
 	}
-	rows, err := a.db.Query(context.Background(), "select name,place,address,school_id,district_id,govt_id,extra_info from helpschool.schools")
+	rows, err := a.db.Query(context.Background(), "select name,place,address,school_id,district_id,govt_id," +
+		"extra_info from helpschool.schools where district_id = $1",districtId)
 	defer rows.Close()
 
 	schools := make([]response.SchoolsResponse, count)

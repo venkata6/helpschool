@@ -47,7 +47,6 @@ func main() {
 	})
 	r.Use(cors.Handler)
 
-
 	//connect to the database and setup the connection pool for services to use
 	setUpDatabaseConnection()
 
@@ -78,7 +77,7 @@ func main() {
 	//// RESTy routes for "schools" resource
 	schoolsService := service.NewSchoolsService(db)
 	r.Route("/api/schools", func(r chi.Router) {
-		r.With(paginate).Get("/", schoolsService.GetSchools)
+		r.With(paginate).Get("/district/{districtId}", schoolsService.GetSchools)
 		r.Post("/", schoolsService.CreateSchools)   // POST /countries
 		r.Delete("/", schoolsService.DeleteSchools) // DELETE /countries
 	})
