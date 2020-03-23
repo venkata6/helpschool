@@ -17,7 +17,7 @@ function School() {
 
     const [state, setState] = useState(-1);
     const [dist, setDist] = useState(-1);
-    const [productGroupId, setProductGroupId] = useState(-1);
+    const [schoolSupplyId, setSchoolSupplyId] = useState(-1);
 
     useEffect(() => {
         dispatch(Actions.getAllStates());
@@ -33,15 +33,23 @@ function School() {
 
     useEffect(() => {
         if(dist!==-1)
-            //console.log("hello world - use effect - ")
-            //console.log(dist)
+            console.log("hello world - use effect  get schools list- ")
+            console.log(dist)
             dispatch(Actions.getSchoolsListFromDist({dist}));
     }, [dispatch, dist]);
 
     useEffect(() => {
-        if(productGroupId!==-1)
-            dispatch(Actions.getProductsGroup({groupId: productGroupId, dist: dist}));
-    }, [dispatch, productGroupId, dist]);
+        if(schoolSupplyId!==-1)
+            console.log("hello world - use effect - get school supply  " + schoolSupplyId + " ", schoolsList[schoolSupplyId])
+            if ( schoolsList[schoolSupplyId] !== undefined) {
+                dispatch(Actions.getProductsGroup({groupId: schoolSupplyId, schoolId: schoolsList[schoolSupplyId].schoolId}));    
+            } 
+        
+    }, [dispatch, schoolsList,schoolSupplyId]);
+
+    // function delay(ms) {
+    //     return new Promise(resolve => setTimeout(resolve, ms));
+    //   }
 
     function handleState(event)
     {
@@ -53,13 +61,13 @@ function School() {
     function handleDist(event)
     {
         setDist(event.target.value);
-        setProductGroupId(0); 
+        setSchoolSupplyId(0); 
         setActiveSchoolIndex(0)
     }
 
     function handleProductList(id, index)
     {
-        setProductGroupId(id);
+        setSchoolSupplyId(id);
         setActiveSchoolIndex(index);
     }
 
