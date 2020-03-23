@@ -51,8 +51,8 @@ export function getDistsFromState(params) {
 }
 
 export function getSchoolsListFromDist(params) {
-    //console.log("hello world before calling backend")
-    //console.log(params)
+    console.log("hello world before calling backend - get schools from dist")
+    console.log(params)
     const request = axios.get('http://localhost:3333/api/schools/district/'+ params.dist);
 
     return (dispatch) =>
@@ -67,7 +67,9 @@ export function getSchoolsListFromDist(params) {
 }
 
 export function getProductsGroup(params) {
-    const request = axios.get('http://localhost:3333/api/school/supplies', {params});
+    console.log("hello world before calling backend - get school supplies")
+    console.log(params)
+    const request = axios.get('http://localhost:3333/api/schools/'+ params.schoolId   + '/supplies', {params});
 
     return (dispatch) =>
         request.then((response) => {

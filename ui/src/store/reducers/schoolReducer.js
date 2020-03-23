@@ -11,7 +11,21 @@ const initialState ={
 const schoolReducer = function (state = initialState, action) {
     switch(action.type) {
         case Actions.GET_ALL_PRODUCTS: {
-            return {...state,  allProducts: action.payload}
+            var productDetailList = [
+                {
+                    title: "Need of Chairs",
+                    name: "Steel Chairs",
+                    counts: 15,
+                    postedAt: '07/08/2019',
+                    parentId: 3,
+                    url: "https://www.amazon.in/bi3-Portable-Seating-Multipurpose-Folding/dp/B07PQ83G39/ref=sr_1_6?qid=1562582426&refinements=p_36%3A3444811031&s=kitchen&sr=1-6",
+                    image: "chair.jpg",
+                    description: "Lightweight, portable and folds flat for easy storage. Large and comfortable padding.Functional Comfortable Design",
+                    dist: "tirunelVeli"
+                }
+            ]
+            return {...state,  allProducts: productDetailList}
+            //return {...state,  allProducts: action.payload}
         }
         case Actions.GET_ALL_STATES: {
             return {...state,  states: action.payload}
@@ -38,7 +52,25 @@ const schoolReducer = function (state = initialState, action) {
   
         }
         case Actions.GET_PRODUCTS_GROUP: {
-            return {...state,  productsGroup: action.payload}
+            var productDetailList = []
+            if ( action.payload.length > 0) {
+                productDetailList.push(
+                    { 
+                        title: action.payload[0].title,
+                        name: action.payload[0].title,
+                        counts: action.payload[0].quantity,
+                        postedAt: action.payload[0].posted_date,
+                        parentId: 3,
+                        url: action.payload[0].url,
+                        image: "chair.jpg",
+                        description: action.payload[0].description,
+                        dist: "tirunelVeli"
+                    }
+                )
+                return {...state,  productsGroup: productDetailList}
+            } else {
+                return {...state,  productsGroup: action.payload}
+            }
         }
         default:
             console.log("school reducer - default")
