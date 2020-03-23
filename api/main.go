@@ -92,7 +92,7 @@ func main() {
 
 	//// RESTy routes for "supplies" resource
 	schoolSuppliesService := service.NewSchoolSuppliesService(db)
-	r.Route("/api/school/supplies", func(r chi.Router) {
+	r.Route("/api/schools/{schoolId}/supplies", func(r chi.Router) {
 		r.With(paginate).Get("/", schoolSuppliesService.GetSchoolSupplies)
 		r.Post("/", schoolSuppliesService.CreateSchoolSupplies)   // POST /countries
 		r.Delete("/", schoolSuppliesService.DeleteSchoolSupplies) // DELETE /countries
