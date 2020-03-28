@@ -20,6 +20,11 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"path"
+	"path/filepath"
+	"strings"
+
+	//"time"
 )
 
 var routes = flag.Bool("routes", false, "Generate router documentation")
@@ -52,6 +57,7 @@ func main() {
 
 	// RESTy routes for "countries" resource
 	countryService := service.NewCountriesService(db)
+
 	r.Route("/api/countries", func(r chi.Router) {
 		r.With(paginate).Get("/", countryService.GetCountries)
 		r.Post("/", countryService.CreateCountries)   // POST /countries
@@ -113,8 +119,42 @@ func main() {
 		}))
 		return
 	}
-	defer db.Close()
-	http.ListenAndServe(":3333", r)
+	defer db.Close() //remove when sql is ready
+
+	FileServer(r, "/", "api/web/")
+
+	http.ListenAndServe(":8080", r)
+}
+
+
+// FileServer is serving static files.
+// FileServer is serving static files
+func FileServer(r chi.Router, public string, static string) {
+
+	if strings.ContainsAny(public, "{}*") {
+		panic("FileServer does not permit URL parameters.")
+	}
+
+	root, _ := filepath.Abs(static)
+	if _, err := os.Stat(root); os.IsNotExist(err) {
+		panic("Static Documents Directory Not Found")
+	}
+
+	fs := http.StripPrefix(public, http.FileServer(http.Dir(root)))
+
+	if public != "/" && public[len(public)-1] != '/' {
+		r.Get(public, http.RedirectHandler(public+"/", 301).ServeHTTP)
+		public += "/"
+	}
+
+	r.Get(public+"*", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		file := strings.Replace(r.RequestURI, public, "/", 1)
+		if _, err := os.Stat(root + file); os.IsNotExist(err) {
+			http.ServeFile(w, r, path.Join(root, "index.html"))
+			return
+		}
+		fs.ServeHTTP(w, r)
+	}))
 }
 
 func setUpDatabaseConnection() {
