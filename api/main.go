@@ -20,10 +20,16 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"path"
+	"path/filepath"
+	"strings"
+
+	//"time"
 )
 
 var routes = flag.Bool("routes", false, "Generate router documentation")
 var db *pgxpool.Pool
+var bProd = true
 
 func main() {
 
@@ -52,6 +58,7 @@ func main() {
 
 	// RESTy routes for "countries" resource
 	countryService := service.NewCountriesService(db)
+
 	r.Route("/api/countries", func(r chi.Router) {
 		r.With(paginate).Get("/", countryService.GetCountries)
 		r.Post("/", countryService.CreateCountries)   // POST /countries
@@ -92,7 +99,7 @@ func main() {
 
 	//// RESTy routes for "supplies" resource
 	schoolSuppliesService := service.NewSchoolSuppliesService(db)
-	r.Route("/api/school/supplies", func(r chi.Router) {
+	r.Route("/api/schools/{schoolId}/supplies", func(r chi.Router) {
 		r.With(paginate).Get("/", schoolSuppliesService.GetSchoolSupplies)
 		r.Post("/", schoolSuppliesService.CreateSchoolSupplies)   // POST /countries
 		r.Delete("/", schoolSuppliesService.DeleteSchoolSupplies) // DELETE /countries
@@ -106,35 +113,100 @@ func main() {
 	// router definition. See the `routes.json` file in this folder for
 	// the output.
 	if *routes {
-		// fmt.Println(docgen.JSONRoutesDoc(r))
+		fmt.Printf(docgen.JSONRoutesDoc(r))
 		fmt.Println(docgen.MarkdownRoutesDoc(r, docgen.MarkdownOpts{
 			ProjectPath: "github.com/go-chi/chi",
 			Intro:       "Welcome to the chi/_examples/rest generated docs.",
 		}))
 		return
 	}
-	defer db.Close()
-	http.ListenAndServe(":3333", r)
+	defer db.Close() //remove when sql is ready
+	if ( bProd ){
+		FileServer(r, "/", "web/")
+	} else {
+		FileServer(r, "/", "api/web/")
+	}
+	http.ListenAndServe(":8080", r)
+}
+
+
+// FileServer is serving static files.
+// FileServer is serving static files
+func FileServer(r chi.Router, public string, static string) {
+
+	if strings.ContainsAny(public, "{}*") {
+		fmt.Printf("FileServer does not permit URL parameters. %v",public)
+	}
+
+	root, _ := filepath.Abs(static)
+	if _, err := os.Stat(root); os.IsNotExist(err) {
+		fmt.Printf("Static Documents Directory Not Found %v ",err )
+	}
+
+	fs := http.StripPrefix(public, http.FileServer(http.Dir(root)))
+
+	if public != "/" && public[len(public)-1] != '/' {
+		r.Get(public, http.RedirectHandler(public+"/", 301).ServeHTTP)
+		public += "/"
+	}
+
+	r.Get(public+"*", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		file := strings.Replace(r.RequestURI, public, "/", 1)
+		if _, err := os.Stat(root + file); os.IsNotExist(err) {
+			http.ServeFile(w, r, path.Join(root, "index.html"))
+			return
+		}
+		fs.ServeHTTP(w, r)
+	}))
 }
 
 func setUpDatabaseConnection() {
+
+	var dbPwd = ""
+	var dsn url.URL
+	var instanceConnectionName = ""
 	// database connection pool setup
-	dsn := url.URL{
-		User:     url.UserPassword("postgres", "Pass1234"),
-		Scheme:   "postgres",
-		Host:     fmt.Sprintf("%s:%s", "localhost", "5432"),
-		Path:     "helpschool",
-		RawQuery: (&url.Values{"sslmode": []string{"disable"}}).Encode(),
+	if ( bProd) {
+		dbPwd                  = "Nellai987!!!"
+		instanceConnectionName = "/cloudsql/helpschool:us-central1:helpschool-db"
+		dsn = url.URL{
+			User:     url.UserPassword("postgres", dbPwd),
+			Scheme:   "postgres",
+			Host:     instanceConnectionName,
+			Path:     "helpschool-db",
+			RawQuery: (&url.Values{"sslmode": []string{"disable"}}).Encode(),
+		}
+
+		// "postgres://username:password@/databasename?host=/cloudsql/example:us-central1:example123"
+		// "postgres://postgres:Nellai987!!!@/helpschool-db?host=/cloudsql/helpschool:us-central1:helpschool-db"
+
+	} else {
+		dbPwd = "Pass1234"
+		dsn = url.URL{
+			User:     url.UserPassword("postgres", dbPwd),
+			Scheme:   "postgres",
+			Host:     fmt.Sprintf("%s:%s", "localhost", "5432"),
+			Path:     "helpschool",
+			RawQuery: (&url.Values{"sslmode": []string{"disable"}}).Encode(),
+		}
 	}
-	var poolConfig, err = pgxpool.ParseConfig(dsn.String())
+	var connectionString = ""
+	if ( bProd == true ){
+		connectionString = "postgres://postgres:Nellai987!!!@/helpschool?host=/cloudsql/helpschool:us-central1:helpschool-db"
+	} else {
+		connectionString = dsn.String()
+	}
+	var poolConfig, err = pgxpool.ParseConfig(connectionString)
 	if err != nil {
-		//log.Crit("Unable to parse DATABASE_URL", "error", err)
+		fmt.Printf("Unable to parse DATABASE_URL %v \n", err)
 		os.Exit(1)
 	}
 	db, err = pgxpool.ConnectConfig(context.Background(), poolConfig)
 	if err != nil {
-		//log.Crit("Unable to create connection pool", "error", err)
+		fmt.Printf("Unable to create connection pool  %v \n ", err)
 		os.Exit(1)
+	} else {
+		fmt.Printf("Database connection successful!!!   \n ")
 	}
 
 	// database connection pool setup

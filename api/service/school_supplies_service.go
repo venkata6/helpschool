@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"errors"
+	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v4/pgxpool"
@@ -12,6 +13,7 @@ import (
 	"github.com/venkata6/helpschool/api/util"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 type SchoolSuppliesService interface {
@@ -62,32 +64,44 @@ func (a *SchoolSuppliesServiceInternal) CreateSchoolSupplies(w http.ResponseWrit
 }
 func (a *SchoolSuppliesServiceInternal) GetSchoolSupplies(w http.ResponseWriter, r *http.Request) {
 
+	schoolId := chi.URLParam(r, "schoolId")
 	var count int
-	rowCount, err := a.db.Query(context.Background(), "select count(*) as count from  helpschool.school_supplies")
+	rowCount, err := a.db.Query(context.Background(), "select count(*) as count from" +
+			"  helpschool.school_supplies where school_id = $1 ",schoolId)
 	for rowCount.Next() {
 		_ = rowCount.Scan(&count)
 		//checkErr(err)
 	}
-	rows, err := a.db.Query(context.Background(), "select school_id,supply_id,quantity,fulfilled_count,extra_info from helpschool.school_supplies")
+	rows, err := a.db.Query(context.Background(), "select su.title,su.description,su.url,ss.school_id,ss.supply_id," +
+		"ss.quantity,ss.fulfilled_count,ss.extra_info,ss.created_date from helpschool.school_supplies as ss" +
+		" inner join helpschool.supplies as su on ss.supply_id = su.supply_id where  ss.school_id = $1",schoolId)
 	defer rows.Close()
 
 	schoolSupplies := make([]response.SchoolSuppliesResponse, count)
 	i := 0
 	for rows.Next() {
 		// Read
+		var title string
+		var description string
+		var url string
 		var supplyId string
 		var schoolId string
 		var quantity int
 		var fulfilledCount int
 		var extraInfo string
+		var postedDate time.Time
 
-		err = rows.Scan(&supplyId, &schoolId, &quantity, &fulfilledCount, &extraInfo)
+		err = rows.Scan( &title,&description,&url,&schoolId,&supplyId, &quantity, &fulfilledCount, &extraInfo,&postedDate)
 		schoolSupplies[i].SchoolSupplies = &dto.SchoolSupplies{} // allocate space
+		schoolSupplies[i].Title = title
+		schoolSupplies[i].Description = description
+		schoolSupplies[i].Url = url
 		schoolSupplies[i].SupplyId = supplyId
 		schoolSupplies[i].SchoolId = schoolId
 		schoolSupplies[i].Quantity = strconv.Itoa(quantity)
 		schoolSupplies[i].FulfilledCount = strconv.Itoa(fulfilledCount)
 		schoolSupplies[i].ExtraInfo = extraInfo
+		schoolSupplies[i].PostedDate = postedDate
 
 		if err != nil {
 			return
