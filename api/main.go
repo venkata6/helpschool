@@ -29,6 +29,7 @@ import (
 
 var routes = flag.Bool("routes", false, "Generate router documentation")
 var db *pgxpool.Pool
+var bProd = true
 
 func main() {
 
@@ -112,7 +113,7 @@ func main() {
 	// router definition. See the `routes.json` file in this folder for
 	// the output.
 	if *routes {
-		// fmt.Println(docgen.JSONRoutesDoc(r))
+		fmt.Printf(docgen.JSONRoutesDoc(r))
 		fmt.Println(docgen.MarkdownRoutesDoc(r, docgen.MarkdownOpts{
 			ProjectPath: "github.com/go-chi/chi",
 			Intro:       "Welcome to the chi/_examples/rest generated docs.",
@@ -120,9 +121,11 @@ func main() {
 		return
 	}
 	defer db.Close() //remove when sql is ready
-
-	FileServer(r, "/", "api/web/")
-
+	if ( bProd ){
+		FileServer(r, "/", "web/")
+	} else {
+		FileServer(r, "/", "api/web/")
+	}
 	http.ListenAndServe(":8080", r)
 }
 
@@ -132,12 +135,12 @@ func main() {
 func FileServer(r chi.Router, public string, static string) {
 
 	if strings.ContainsAny(public, "{}*") {
-		panic("FileServer does not permit URL parameters.")
+		fmt.Printf("FileServer does not permit URL parameters. %v",public)
 	}
 
 	root, _ := filepath.Abs(static)
 	if _, err := os.Stat(root); os.IsNotExist(err) {
-		panic("Static Documents Directory Not Found")
+		fmt.Printf("Static Documents Directory Not Found %v ",err )
 	}
 
 	fs := http.StripPrefix(public, http.FileServer(http.Dir(root)))
@@ -158,23 +161,52 @@ func FileServer(r chi.Router, public string, static string) {
 }
 
 func setUpDatabaseConnection() {
+
+	var dbPwd = ""
+	var dsn url.URL
+	var instanceConnectionName = ""
 	// database connection pool setup
-	dsn := url.URL{
-		User:     url.UserPassword("postgres", "Pass1234"),
-		Scheme:   "postgres",
-		Host:     fmt.Sprintf("%s:%s", "localhost", "5432"),
-		Path:     "helpschool",
-		RawQuery: (&url.Values{"sslmode": []string{"disable"}}).Encode(),
+	if ( bProd) {
+		dbPwd                  = "Nellai987!!!"
+		instanceConnectionName = "/cloudsql/helpschool:us-central1:helpschool-db"
+		dsn = url.URL{
+			User:     url.UserPassword("postgres", dbPwd),
+			Scheme:   "postgres",
+			Host:     instanceConnectionName,
+			Path:     "helpschool-db",
+			RawQuery: (&url.Values{"sslmode": []string{"disable"}}).Encode(),
+		}
+
+		// "postgres://username:password@/databasename?host=/cloudsql/example:us-central1:example123"
+		// "postgres://postgres:Nellai987!!!@/helpschool-db?host=/cloudsql/helpschool:us-central1:helpschool-db"
+
+	} else {
+		dbPwd = "Pass1234"
+		dsn = url.URL{
+			User:     url.UserPassword("postgres", dbPwd),
+			Scheme:   "postgres",
+			Host:     fmt.Sprintf("%s:%s", "localhost", "5432"),
+			Path:     "helpschool",
+			RawQuery: (&url.Values{"sslmode": []string{"disable"}}).Encode(),
+		}
 	}
-	var poolConfig, err = pgxpool.ParseConfig(dsn.String())
+	var connectionString = ""
+	if ( bProd == true ){
+		connectionString = "postgres://postgres:Nellai987!!!@/helpschool?host=/cloudsql/helpschool:us-central1:helpschool-db"
+	} else {
+		connectionString = dsn.String()
+	}
+	var poolConfig, err = pgxpool.ParseConfig(connectionString)
 	if err != nil {
-		//log.Crit("Unable to parse DATABASE_URL", "error", err)
+		fmt.Printf("Unable to parse DATABASE_URL %v \n", err)
 		os.Exit(1)
 	}
 	db, err = pgxpool.ConnectConfig(context.Background(), poolConfig)
 	if err != nil {
-		//log.Crit("Unable to create connection pool", "error", err)
+		fmt.Printf("Unable to create connection pool  %v \n ", err)
 		os.Exit(1)
+	} else {
+		fmt.Printf("Database connection successful!!!   \n ")
 	}
 
 	// database connection pool setup

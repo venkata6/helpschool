@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"errors"
+	"fmt"
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v4/pgxpool"
@@ -62,7 +63,6 @@ func (a *StatesServiceInternal) GetStates(w http.ResponseWriter, r *http.Request
 	}
 	rows, err := a.db.Query(context.Background(), "select name,state_id,country_id,govt_id,extra_info from helpschool.states")
 	defer rows.Close()
-
 	states := make([]response.StatesResponse, count)
 	i := 0
 	for rows.Next() {
@@ -82,12 +82,14 @@ func (a *StatesServiceInternal) GetStates(w http.ResponseWriter, r *http.Request
 		states[i].ExtraInfo = extraInfo
 
 		if err != nil {
+			fmt.Printf("Error doing 'scan' states -  %v  \n",  err )
 			return
 		}
 		i++
 	}
 	// Any errors encountered by rows.Next or rows.Scan will be returned here
 	if rows.Err() != nil {
+		fmt.Printf("Error doing 'select' states -  %v  %v \n", rows.Err(), err )
 		return
 	}
 	if err := render.RenderList(w, r, NewStatesListResponse(states)); err != nil {
