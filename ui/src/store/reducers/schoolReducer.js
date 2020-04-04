@@ -54,19 +54,20 @@ const schoolReducer = function (state = initialState, action) {
         case Actions.GET_PRODUCTS_GROUP: {
             var productDetailList = []
             if ( action.payload.length > 0) {
-                productDetailList.push(
-                    { 
-                        title: action.payload[0].title,
-                        name: action.payload[0].title,
-                        counts: action.payload[0].quantity,
-                        postedAt: action.payload[0].posted_date,
+                var productDetailList = []
+                for ( var index = 0; index < action.payload.length; index++) {
+                    productDetailList.push({ 
+                        title: action.payload[index].title,
+                        name: action.payload[index].title,
+                        counts: action.payload[index].quantity,
+                        postedAt: action.payload[index].posted_date,
                         parentId: 3,
-                        url: action.payload[0].url,
+                        url: action.payload[index].url,
                         image: "chair.jpg",
-                        description: action.payload[0].description,
+                        description: action.payload[index].description,
                         dist: "tirunelVeli"
-                    }
-                )
+                    })
+                }
                 return {...state,  productsGroup: productDetailList}
             } else {
                 return {...state,  productsGroup: action.payload}
