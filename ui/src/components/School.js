@@ -3,7 +3,7 @@ import {Col, Container, Form, Row, ListGroup, Card, Table} from "react-bootstrap
 
 import * as Actions from './../store/actions';
 import {format} from 'date-fns'
-
+import Alert from 'react-bootstrap/Alert'
 
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -137,7 +137,8 @@ function School() {
                                             <tr>
                                                 <th>#</th>
                                                 <th>Title</th>
-                                                <th>Counts</th>
+                                                <th>Needed</th>
+                                                <th>Fulfilled</th>
                                                 <th>Description</th>
                                                 <th>Posted At</th>
                                             </tr>
@@ -148,6 +149,8 @@ function School() {
                                                     <td>{index+1}</td>
                                                     <td><Card.Link href={product.url} target="_blank">{product.title}</Card.Link></td>
                                                     <td className="text-center">{product.counts}</td>
+                                                    <td className="text-center">{product.fulfilled}</td> 
+                                                    {/* <td className="text-center"><Welcome name="venky"/></td> */}
                                                     <td>{product.description}</td>
                                                     <td style={{minWidth: 100}}>{format(new Date(product.postedAt), "dd MMMM yyyy")}</td>
                                                 </tr>
@@ -155,6 +158,34 @@ function School() {
                                             </tbody>
                                         </Table>
                                     )}
+                                    {schoolsList.length!=0 && productsGroup && productsGroup.length==0 && (     <Alert variant="success">
+                                                    <Alert.Heading>No items for the selected school yet ! </Alert.Heading>
+                                                    <p>
+                                                    But you can still send some of the popular items to the school. ( directly to the headmaster)
+                                                        Select from the following popular needed items for donation !  Feel good ! <br/> </p>
+                                                    <p>
+                                                     
+                                                    1. <a href="https://www.amazon.in/MBTC-Ambient-Folding-Training-Institution/dp/B07GC293H9/ref=sr_1_36?dchild=1&keywords=school+chairs&qid=1586652767&sr=8-36" target="_blank">
+                                                        School chairs
+                                                    </a><br/>
+                                                    2. <a href="https://www.amazon.in/POLESTAR-Casual-bagpack-School-Backpack/dp/B07PQQ8M7B/ref=sr_1_31?crid=2X3C5G567QPY7&dchild=1&keywords=school+bags+for+girls+of+15+years&qid=1586653400&sprefix=school+%2Caps%2C328&sr=8-31" target="_blank">
+                                                        School bags
+                                                    </a><br/>
+                                                    3. <a href="https://www.amazon.in/Intra-Table-School-Rectangle-Kids/dp/B07364S8TZ/ref=sr_1_39?crid=3MOHJVOYD5ATY&dchild=1&keywords=school+bench+for+kids&qid=1586653829&sprefix=school+bench+%2Caps%2C293&sr=8-39" target="_blank">
+                                                        School Study Rectangle table + 6 kids chair
+                                                    </a></p>
+                                                    </Alert>)}
+                                    {schoolsList.length==0  && (     <Alert variant="success">
+                                                    <Alert.Heading>No school selected yet ! </Alert.Heading>
+                                                    <p>
+                                                        1. Please select a school <br/>
+                                                        2. Note the school address <br/>
+                                                        3. Select the items to donate <br/>
+                                                        4. Go to e-commerce site <br/>
+                                                        5. Send the items directly to the 'headmaster' of the school !  <br/>
+                                                        6.  Feel good ! <br/> </p>
+                                                    </Alert>)}
+                                                    
                                 </Col>
                             </Row>
                         </Container>
@@ -164,6 +195,45 @@ function School() {
             </Container>
         </section>
     );
+}
+class NoItemsYet extends React.Component {
+    render() {
+      return     <Table striped bordered hover size="sm" responsive>
+      No items for the selected school.But you can still send some of the popular items to the school. ( directly to the headmaster)
+      <thead>
+      <tr>
+          <th>#</th>
+          <th>Title</th>
+          <th>Needed</th>
+          <th>Fulfilled</th>
+          <th>Description</th>
+          <th>Posted At</th>
+      </tr>
+      </thead>
+      <tbody>
+      {this.props.productsGroup.map((product, index)=>(
+          <tr key={index}>
+              <td>{index+1}</td>
+              <td><Card.Link href={product.url} target="_blank">{product.title}</Card.Link></td>
+              <td className="text-center">{product.counts}</td>
+              <td className="text-center">{product.fulfilled}</td> 
+              {/* <td className="text-center"><Welcome name="venky"/></td> */}
+              <td>{product.description}</td>
+              <td style={{minWidth: 100}}>{format(new Date(product.postedAt), "dd MMMM yyyy")}</td>
+          </tr>
+      ))}
+      </tbody>
+  </Table>
+  }
+}
+
+class NoItemsMessage extends React.Component {
+    render() {
+      return     
+    //   No items for the selected school.But you can still send some of the popular items to the school. ( directly to the headmaster)
+
+
+  }
 }
 
 export default School;

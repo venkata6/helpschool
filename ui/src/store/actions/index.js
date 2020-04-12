@@ -8,8 +8,16 @@ export const GET_PRODUCTS_GROUP = '[SCHOOL APP] GET PRODUCTS GROUP';
 const options = {
     headers: {'Access-Control-Allow-Origin': '*'}
   };
+
+  var bProd = true;
+  var host = ""
+  if ( bProd){
+    host= "https://helpschool.appspot.com"
+ 
+  }
 export function getAllProducts() {
-    const request = axios.get('http://localhost:3333/api/schools/supplies');
+
+    const request = axios.get( host + '/api/schools/supplies');
     console.log('request=', request);
 
     return (dispatch) =>
@@ -21,8 +29,7 @@ export function getAllProducts() {
         );
 }
 export function getAllStates() {
-    //const request = axios.get('/api/school/getStates');
-    const request = axios.get('http://localhost:3333/api/states');
+    const request = axios.get(host + '/api/states');
     console.log('request=', request);
 
     return (dispatch) =>
@@ -34,11 +41,8 @@ export function getAllStates() {
         );
 }
 
-export function getDistsFromState(params) {
-   
-//    const request = axios.get('http://localhost:3333/api/districts/state/', {params});
-    const request = axios.get('http://localhost:3333/api/districts/state/'+params.state);
-
+export function getDistsFromState(params) {   
+    const request = axios.get( host + '/api/districts/state/'+params.state);
 
     return (dispatch) =>
         request.then((response) => {
@@ -51,9 +55,9 @@ export function getDistsFromState(params) {
 }
 
 export function getSchoolsListFromDist(params) {
-    console.log("hello world before calling backend - get schools from dist")
-    console.log(params)
-    const request = axios.get('http://localhost:3333/api/schools/district/'+ params.dist);
+    //console.log("hello world before calling backend - get schools from dist")
+    //console.log(params)
+    const request = axios.get(host + '/api/schools/district/'+ params.dist);
 
     return (dispatch) =>
         request.then((response) => {
@@ -67,9 +71,9 @@ export function getSchoolsListFromDist(params) {
 }
 
 export function getProductsGroup(params) {
-    console.log("hello world before calling backend - get school supplies")
-    console.log(params)
-    const request = axios.get('http://localhost:3333/api/schools/'+ params.schoolId   + '/supplies', {params});
+    //console.log("hello world before calling backend - get school supplies")
+    //console.log(params)
+    const request = axios.get(host + '/api/schools/'+ params.schoolId   + '/supplies', {params});
 
     return (dispatch) =>
         request.then((response) => {
