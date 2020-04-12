@@ -14,7 +14,7 @@ function Main() {
             <Header/>
             <Introduce/>
             <School/>
-            <FeaturedProducts/>
+            {/* <FeaturedProducts/> */}
             <Footer/>
         </div>
     );
