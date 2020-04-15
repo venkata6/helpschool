@@ -9,7 +9,7 @@ const options = {
     headers: {'Access-Control-Allow-Origin': '*'}
   };
 
-  var bProd = true;
+  var bProd = false;
   var host = ""
   if ( bProd){
     host= "https://helpschool.appspot.com"

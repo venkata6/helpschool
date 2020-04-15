@@ -164,14 +164,16 @@ function School() {
                                                     But you can still send some of the popular items to the school. ( directly to the headmaster)
                                                         Select from the following popular needed items for donation !  Feel good ! <br/> </p>
                                                     <p>
-                                                     
-                                                    1. <a href="https://www.amazon.in/MBTC-Ambient-Folding-Training-Institution/dp/B07GC293H9/ref=sr_1_36?dchild=1&keywords=school+chairs&qid=1586652767&sr=8-36" target="_blank">
+                                                    1. <a href="https://www.amazon.in/s?k=learning+aids&rh=n%3A1350380031%2Cp_n_age_range%3A1480709031%7C1665125031&dc&qid=1586709457&rnid=1480704031&ref=sr_nr_p_n_age_range_5" target="_blank">
+                                                        Learning Aids
+                                                    </a><br/>
+                                                    2. <a href="https://www.amazon.in/MBTC-Ambient-Folding-Training-Institution/dp/B07GC293H9/ref=sr_1_36?dchild=1&keywords=school+chairs&qid=1586652767&sr=8-36" target="_blank">
                                                         School chairs
                                                     </a><br/>
-                                                    2. <a href="https://www.amazon.in/POLESTAR-Casual-bagpack-School-Backpack/dp/B07PQQ8M7B/ref=sr_1_31?crid=2X3C5G567QPY7&dchild=1&keywords=school+bags+for+girls+of+15+years&qid=1586653400&sprefix=school+%2Caps%2C328&sr=8-31" target="_blank">
+                                                    3. <a href="https://www.amazon.in/POLESTAR-Casual-bagpack-School-Backpack/dp/B07PQQ8M7B/ref=sr_1_31?crid=2X3C5G567QPY7&dchild=1&keywords=school+bags+for+girls+of+15+years&qid=1586653400&sprefix=school+%2Caps%2C328&sr=8-31" target="_blank">
                                                         School bags
                                                     </a><br/>
-                                                    3. <a href="https://www.amazon.in/Intra-Table-School-Rectangle-Kids/dp/B07364S8TZ/ref=sr_1_39?crid=3MOHJVOYD5ATY&dchild=1&keywords=school+bench+for+kids&qid=1586653829&sprefix=school+bench+%2Caps%2C293&sr=8-39" target="_blank">
+                                                    4. <a href="https://www.amazon.in/Intra-Table-School-Rectangle-Kids/dp/B07364S8TZ/ref=sr_1_39?crid=3MOHJVOYD5ATY&dchild=1&keywords=school+bench+for+kids&qid=1586653829&sprefix=school+bench+%2Caps%2C293&sr=8-39" target="_blank">
                                                         School Study Rectangle table + 6 kids chair
                                                     </a></p>
                                                     </Alert>)}
@@ -180,10 +182,10 @@ function School() {
                                                     <p>
                                                         1. Please select a school <br/>
                                                         2. Note the school address <br/>
-                                                        3. Select the items to donate <br/>
+                                                        3. Select the items to donate (OR) send materials you already have <br/>
                                                         4. Go to e-commerce site <br/>
                                                         5. Send the items directly to the 'headmaster' of the school !  <br/>
-                                                        6.  Feel good ! <br/> </p>
+                                                        6. Feel good ! <br/> </p>
                                                     </Alert>)}
                                                     
                                 </Col>
