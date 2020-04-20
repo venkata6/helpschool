@@ -17,6 +17,7 @@ function School() {
 
     const [state, setState] = useState(-1);
     const [dist, setDist] = useState(-1);
+    //const [schoolsList, setSchoolsList] = useState([]);
     const [schoolSupplyId, setSchoolSupplyId] = useState(-1);
 
     useEffect(() => {
@@ -35,6 +36,7 @@ function School() {
         if(dist!==-1)
             console.log("hello world - use effect  get schools list- ")
             console.log(dist)
+            schoolsList.length=0
             dispatch(Actions.getSchoolsListFromDist({dist}));
     }, [dispatch, dist]);
 
@@ -116,7 +118,6 @@ function School() {
                     <Col sm={4} xs={12} className="schoolWrap">
                         {schoolsList && schoolsList.length>0 && (
                             <div className="card block-18 color-3 p-2">
-
                                 <ListGroup variant="flush">
                                     {schoolsList && schoolsList.length>0 && schoolsList.map((list, index)=>(
                                         <ListGroup.Item key={index}  active={index===activeSchoolIndex}
@@ -130,7 +131,9 @@ function School() {
                     <Col sm={8} xs={12}>
                         <Container>
                             <Row>
-                                <Col sm={12} className="detailWrap">
+                            {schoolsList.length !==0  && (     <Alert variant="info">
+                            <Alert.Heading></Alert.Heading><b>School Address:</b> {schoolsList[schoolSupplyId].address}</Alert>)}
+                                <Col sm={14} className="detailWrap">
                                     {productsGroup && productsGroup.length>0 && (
                                         <Table striped bordered hover size="sm" responsive>
                                             <thead>
@@ -140,6 +143,7 @@ function School() {
                                                 <th>Needed</th>
                                                 <th>Fulfilled</th>
                                                 <th>Description</th>
+                                                <th>Address</th>
                                                 <th>Posted At</th>
                                             </tr>
                                             </thead>
@@ -150,15 +154,15 @@ function School() {
                                                     <td><Card.Link href={product.url} target="_blank">{product.title}</Card.Link></td>
                                                     <td className="text-center">{product.counts}</td>
                                                     <td className="text-center">{product.fulfilled}</td> 
-                                                    {/* <td className="text-center"><Welcome name="venky"/></td> */}
                                                     <td>{product.description}</td>
+                                                    <td>{product.address}</td>
                                                     <td style={{minWidth: 100}}>{format(new Date(product.postedAt), "dd MMMM yyyy")}</td>
                                                 </tr>
                                             ))}
                                             </tbody>
                                         </Table>
                                     )}
-                                    {schoolsList.length!=0 && productsGroup && productsGroup.length==0 && (     <Alert variant="success">
+                                    {schoolsList.length !==0 && productsGroup && productsGroup.length===0 && (     <Alert variant="success">
                                                     <Alert.Heading>No items for the selected school yet ! </Alert.Heading>
                                                     <p>
                                                     But you can still send some of the popular items to the school. ( directly to the headmaster)
@@ -177,7 +181,7 @@ function School() {
                                                         School Study Rectangle table + 6 kids chair
                                                     </a></p>
                                                     </Alert>)}
-                                    {schoolsList.length==0  && (     <Alert variant="success">
+                                    {schoolsList.length===0  && (     <Alert variant="dark">
                                                     <Alert.Heading>No school selected yet ! </Alert.Heading>
                                                     <p>
                                                         1. Please select a school <br/>

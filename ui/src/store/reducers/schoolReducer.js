@@ -11,9 +11,9 @@ const initialState ={
 const schoolReducer = function (state = initialState, action) {
     switch(action.type) {
         case Actions.GET_ALL_PRODUCTS: {
-            var allProductsList = []
+            const allProductsList = []
             if ( action.payload.length > 0) {
-                for ( var index = 0; index < action.payload.length; index++) {
+                for ( let index = 0; index < action.payload.length; index++) {
                     allProductsList.push({ 
                         title: action.payload[index].title,
                         name: action.payload[index].title,
@@ -45,12 +45,12 @@ const schoolReducer = function (state = initialState, action) {
         case Actions.GET_SCHOOLS_FROM_DIST: {
             //console.log("School reducer - GET_SCHOOLS_FROM_DIST - ",action.payload[0].name)
             if ( action.payload.length > 0) {
-                var schoolListFromBackend = [];
-                for (  index = 0; index < action.payload.length; index++) {
-                    schoolListFromBackend.push(
-                       {label: action.payload[index].name + "," + action.payload[index].place, 
-                                schoolId:action.payload[index].school_id , id: index},
-                    )
+                const schoolListFromBackend = [];
+                for ( let index = 0; index < action.payload.length; index++) {
+                    schoolListFromBackend.push({
+                        label: action.payload[index].name + "," + action.payload[index].place, 
+                        schoolId:action.payload[index].school_id , id: index,
+                        address: action.payload[index].address})
                 }
                 return {...state,  schoolsList: schoolListFromBackend, productsGroup: []}
             } else {
@@ -59,9 +59,9 @@ const schoolReducer = function (state = initialState, action) {
   
         }
         case Actions.GET_PRODUCTS_GROUP: {
-            var productDetailList = []
+            const productDetailList = []
             if ( action.payload.length > 0) {
-                for (  index = 0; index < action.payload.length; index++) {
+                for (  let index = 0; index < action.payload.length; index++) {
                     productDetailList.push({ 
                         title: action.payload[index].title,
                         name: action.payload[index].title,
