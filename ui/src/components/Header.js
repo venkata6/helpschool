@@ -1,22 +1,25 @@
 import React from 'react';
-import { Container, Nav, Navbar} from "react-bootstrap";
+import { Container, Nav, Navbar, NavItem} from "react-bootstrap";
+import { Route,HashRouter } from "react-router-dom";
+import Teachers from './Teachers';
+import Home from "./Home";
 
 function Header() {
 
     return (
         <>
-            <Navbar bg="transparent" variant="dark" expand="lg" className={"ftco-navbar-light"} sticky="top">
+            <Navbar bg="opaque" expand="lg" expanded="yes" variant="dark" className={"ftco-navbar-light"} sticky="top">
                 <Container>
                     <Navbar.Brand href="/">HelpSchool</Navbar.Brand>
-                    <Navbar.Toggle aria-controls="responsive-navbar-nav" aria-label="Menu"/>
-                    <Navbar.Collapse id="basic-navbar-nav" className="subMenuWrap-Right">
+                    <Navbar.Toggle  aria-controls="responsive-navbar-nav" aria-label="Menu"/>
+                    <Navbar.Collapse  id="basic-navbar-nav" className="subMenuWrap-Right">
                         <Nav className="mr-auto"/>
                         <Nav>
                             <Nav className="mr-auto">
                                 <Nav.Link href="/">Home</Nav.Link>
                             </Nav>
                             <Nav className="mr-auto">
-                                <Nav.Link href="#">Teachers</Nav.Link>
+                                <Nav.Link href="/teachers">Teachers</Nav.Link>
                             </Nav>
                         </Nav>
                     </Navbar.Collapse>
@@ -33,8 +36,12 @@ function Header() {
                         </div>
                     </div>
                 </Container>
-                <div className="text-right">Image:istockcredit.com-<br/>vikram suryavanshi</div>
-            </div>
+                <div className="imageCredit">Image:istockcredit.com-<br/>vikram suryavanshi</div>
+            </div> 
+            <div className="content">
+            <Route exact path="/" component={Home}/>
+            <Route path="/teachers" component={Teachers}/>
+          </div>
         </>
     )
 }

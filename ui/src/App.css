@@ -31,10 +31,10 @@ body {
   color: rgba(0, 0, 0, 0.7);
 }
 .block-18.color-1 {
-  background: #f86f2d;
+  background: #f8f52d;
 }
 .block-18.color-2 {
-  background: #fa8f3d;
+  background: #3dedfa;
 }
 .block-18.color-3 {
   background: #faaa3a;
@@ -124,5 +124,10 @@ footer ul {
   color: #f86f2d!important;
 }
 .subMenuWrap-Right a{
-  color: #f86f2d!important;
+  color: #f3f0f0!important;
+  font-size: 20px;
+}
+.imageCredit {
+  font-size: 8px;
+  text-align: end;
 }

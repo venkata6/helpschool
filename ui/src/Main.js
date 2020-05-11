@@ -12,8 +12,8 @@ function Main() {
     return (
         <div className="App">
             <Header/>
-            <Introduce/>
-            <School/>
+            {/* <Introduce/>
+            <School/> */}
             {/* <FeaturedProducts/> */}
             <Footer/>
         </div>
