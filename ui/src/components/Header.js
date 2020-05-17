@@ -10,7 +10,7 @@ function Header() {
         <>
             <Navbar bg="opaque" expand="lg" expanded="yes" variant="dark" className={"ftco-navbar-light"} sticky="top">
                 <Container>
-                    <Navbar.Brand href="/">HelpSchool</Navbar.Brand>
+                    {/* <Navbar.Brand href="/">HelpSchool</Navbar.Brand> */}
                     <Navbar.Toggle  aria-controls="responsive-navbar-nav" aria-label="Menu"/>
                     <Navbar.Collapse  id="basic-navbar-nav" className="subMenuWrap-Right">
                         <Nav className="mr-auto"/>
