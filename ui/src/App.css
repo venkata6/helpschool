@@ -10,12 +10,13 @@ body {
   color: gray;
 }
 .ftco-navbar-light {
-  background-color: transparent !important;
+  background-color: #000000 !important;
   position: absolute!important;
   left: 0;
   right: 0;
   z-index: 3;
-  top: 10px;
+  top: 0px;
+  height: 3%;
 }
 .bg-warning {
   background: #f86f2d!important;
@@ -125,7 +126,7 @@ footer ul {
 }
 .subMenuWrap-Right a{
   color: #f5f1f1!important;
-  font-size: 30px;
+  font-size: 20px;
 }
 .imageCredit {
   font-size: 8px;

@@ -8,7 +8,7 @@ function Header() {
 
     return (
         <>
-            <Navbar bg="opaque" expand="lg" expanded="yes" variant="dark" className={"ftco-navbar-light"} sticky="top">
+            <Navbar bg="dark" variant="dark" className={"ftco-navbar-light"} sticky="top">
                 <Container>
                     {/* <Navbar.Brand href="/">HelpSchool</Navbar.Brand> */}
                     <Navbar.Toggle  aria-controls="responsive-navbar-nav" aria-label="Menu"/>
