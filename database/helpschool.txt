@@ -146,7 +146,9 @@ CREATE TABLE helpschool.teacher_requests (
     district character varying(256) NOT NULL,
     state character varying(256) NOT NULL,
     country character varying(256),
-    zipcode character varying(128) DEFAULT 0
+    zipcode character varying(128) DEFAULT 0,
+    extra_info jsonb,
+    photo_link character varying(4096)
 );
 
 
