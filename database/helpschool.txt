@@ -132,6 +132,48 @@ CREATE TABLE helpschool.supplies (
 ALTER TABLE helpschool.supplies OWNER TO postgres;
 
 --
+-- Name: teacher_requests; Type: TABLE; Schema: helpschool; Owner: postgres
+--
+
+CREATE TABLE helpschool.teacher_requests (
+    id bigint NOT NULL,
+    teacher_name character varying(256) NOT NULL,
+    teacher_phone character varying(32),
+    url character varying(4096) NOT NULL,
+    quantity_needed integer DEFAULT 0 NOT NULL,
+    address character varying(4096) NOT NULL,
+    place character varying(256),
+    district character varying(256) NOT NULL,
+    state character varying(256) NOT NULL,
+    country character varying(256),
+    zipcode character varying(128) DEFAULT 0
+);
+
+
+ALTER TABLE helpschool.teacher_requests OWNER TO postgres;
+
+--
+-- Name: TABLE teacher_requests; Type: COMMENT; Schema: helpschool; Owner: postgres
+--
+
+COMMENT ON TABLE helpschool.teacher_requests IS 'teachers requests will be saved here ';
+
+
+--
+-- Name: teacher_requests_id_seq; Type: SEQUENCE; Schema: helpschool; Owner: postgres
+--
+
+ALTER TABLE helpschool.teacher_requests ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME helpschool.teacher_requests_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
 -- Name: countries countries_pkey; Type: CONSTRAINT; Schema: helpschool; Owner: postgres
 --
 
