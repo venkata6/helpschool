@@ -29,7 +29,7 @@ import (
 
 var routes = flag.Bool("routes", false, "Generate router documentation")
 var db *pgxpool.Pool
-var bProd = true
+var bProd = false
 
 func main() {
 
@@ -110,6 +110,14 @@ func main() {
 	r.Route("/api/schools/supplies", func(r chi.Router) {
 		r.With(paginate).Get("/", schoolSuppliesService.GetFeaturedSchoolSupplies)
 	})
+
+    //// RESTy routes for POST "teachers requests" resource
+    teachersRequestService := service.NewTeachersRequestService(db)
+	r.Route("/api/teachers/requests", func(r chi.Router) {
+		r.With(paginate).Get("/{id}", teachersRequestService.GetTeachersRequest)
+		r.Post("/", teachersRequestService.CreateTeachersRequest)   // POST /teachers/requests
+	})
+
 
 
 	// Mount the admin sub-router, which btw is the same as:

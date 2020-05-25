@@ -148,7 +148,8 @@ CREATE TABLE helpschool.teacher_requests (
     country character varying(256),
     zipcode character varying(128) DEFAULT 0,
     extra_info jsonb,
-    photo_link character varying(4096)
+    photo_link character varying(4096),
+    teacher_email character varying(256)
 );
 
 
