@@ -1,13 +1,57 @@
-import React from 'react';
+import React, {useRef,  useState} from 'react';
 import {Col, Container, Form, Button} from "react-bootstrap";
 import Alert from 'react-bootstrap/Alert'
-
+import {useDispatch} from 'react-redux';
+import * as Actions from './../store/actions';
 
 import Introduce from "./Introduce";
 
 function Teachers() {
 
-    return (
+  const dispatch = useDispatch();
+
+  const teacherNameRef = useRef(null)
+  const teacherPhoneRef = useRef(null)
+  const teacherEmailRef = useRef(null)
+  const productUrlRef = useRef(null)
+  const quantityRef = useRef(null)
+  const schoolNameRef = useRef(null)
+  const addressRef = useRef(null)
+  const districtRef = useRef(null)
+  const stateRef = useRef(null)
+  const pincodeRef = useRef(null)
+
+  // function handleChange(event) {
+  //   alert(event.target.name + ":" + event.target.value )
+  //   alert(teacherNameRef.current.value)
+  //   setTeacherName( event.target.value)
+  // }
+
+  function handleSubmit(event){
+     
+      event.preventDefault();
+      const item = {
+        teacher_name: teacherNameRef.current.value,
+        teacher_email: teacherEmailRef.current.value,
+        teacher_phone: teacherPhoneRef.current.value,
+        url: productUrlRef.current.value,
+        quantity_needed: quantityRef.current.value,
+        address: schoolNameRef.current.value,
+        place: addressRef.current.value,
+        district: districtRef.current.value,
+        state: stateRef.current.value,
+        country: "India",
+        photo_link: "",
+        extra_info: "{}",
+        pincode: pincodeRef.current.value}
+     
+      console.log(item)  
+      Actions.postTeacherRequest(item);
+
+      console.log("Submit clicked: ", event.target)
+  }
+   
+  return (
           <section className={"ftco-section"}>
             <Container>
             <Alert variant="success">
@@ -15,62 +59,74 @@ function Teachers() {
                 <Alert.Heading>Add school materials you need ! </Alert.Heading>
                  1. Go to any e-commerce site and find the materials you need for your class/students <br/>
                  2. Copy the link and add also how much you need in the form below<br/>
-                 3. Fill your full school address <br/>
+                 3. Fill your full school address ( all fields except teacher's email are mandatory) <br/>
                  4. Submit the request<br/>
                  5. Your request will be added to database and some donor will buy and send them to the headmaster of your school<br/>
                </p>
             </Alert>
-            <Form>
+            <Form  onSubmit={handleSubmit} >
+            <Form.Row>
+                <Form.Group as={Col} controlId="formTeacherName">
+                  <Form.Label>Name</Form.Label>
+                  <Form.Control ref={teacherNameRef} placeholder="Teacher's name"/>
+                </Form.Group>
+
+                <Form.Group as={Col} controlId="formTeacherPhone">
+                  <Form.Label>Phone</Form.Label>
+                  <Form.Control ref={teacherPhoneRef} placeholder="Teacher's phone number" />
+                </Form.Group>
+
+                <Form.Group as={Col} controlId="formTeacherEmail">
+                  <Form.Label>Email</Form.Label>
+                  <Form.Control ref={teacherEmailRef} type="email" placeholder="Teacher's email"/>
+                </Form.Group>
+              </Form.Row>
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridUrl">
                   <Form.Label>Product URL</Form.Label>
-                  <Form.Control placeholder="Enter URL of the product" />
+                  <Form.Control ref={productUrlRef} placeholder="Enter URL of the product" />
                 </Form.Group>
 
                 <Form.Group as={Col} controlId="formGridPassword">
                   <Form.Label>Quantity needed</Form.Label>
-                  <Form.Control placeholder="Quantity" />
+                  <Form.Control ref={quantityRef} placeholder="Quantity" />
                 </Form.Group>
               </Form.Row>
 
               <Form.Group controlId="formGridAddress1">
-                <Form.Label>Address</Form.Label>
-                <Form.Control placeholder="Government Elementary" />
+                <Form.Label>School Name</Form.Label>
+                <Form.Control ref={schoolNameRef} placeholder="School Name with street name - Example - Government Elementary, 10th street " />
               </Form.Group>
 
               <Form.Group controlId="formGridAddress2">
-                <Form.Label>Address 2</Form.Label>
-                <Form.Control placeholder="Street , Village etc" />
+                <Form.Label>Village/Town/City</Form.Label>
+                <Form.Control ref={addressRef} placeholder="Village, town, city etc" />
               </Form.Group>
 
               <Form.Row>
                 <Form.Group as={Col} controlId="formGridCity">
-                  <Form.Label>Village/Town/City</Form.Label>
-                  <Form.Control />
+                  <Form.Label>District</Form.Label>
+                  <Form.Control  ref={districtRef} placeholder="District"/>
                 </Form.Group>
 
                 <Form.Group as={Col} controlId="formGridState">
                   <Form.Label>State</Form.Label>
-                  <Form.Control />
+                  <Form.Control ref={stateRef} placeholder="state" />
                 </Form.Group>
 
                 <Form.Group as={Col} controlId="formGridZip">
                   <Form.Label>Pincode</Form.Label>
-                  <Form.Control />
+                  <Form.Control ref={pincodeRef} placeholder="pincode" />
                 </Form.Group>
               </Form.Row>
-{/* 
-              <Form.Group id="formGridCheckbox">
-                <Form.Check type="checkbox" label="Check me out" />
-              </Form.Group> */}
-
-              <Button variant="primary" type="submit">
+              <Button variant="primary" type="submit" >
                 Submit
               </Button>
             </Form> 
         </Container>
         </section>
     );
-}
+   
+  }
 
 export default Teachers;

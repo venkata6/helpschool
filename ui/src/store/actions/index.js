@@ -4,6 +4,7 @@ export const GET_ALL_STATES = '[SCHOOL APP] GET ALL STATES';
 export const GET_DISTS_FROM_STATE = '[SCHOOL APP] GET DISTS FROM STATE';
 export const GET_SCHOOLS_FROM_DIST = '[SCHOOL APP] GET SCHOOLS FROM DIST';
 export const GET_PRODUCTS_GROUP = '[SCHOOL APP] GET PRODUCTS GROUP';
+export const DEFAULT = '[SCHOOL APP] DEFAULT';
 
 const options = {
     headers: {'Access-Control-Allow-Origin': '*'}
@@ -13,7 +14,8 @@ const options = {
   var host = ""
   if ( bProd){
     host= "https://helpschool.appspot.com"
- 
+  } else {
+      host="http://localhost:8080"
   }
 export function getAllProducts() {
 
@@ -85,3 +87,35 @@ export function getProductsGroup(params) {
             }
         );
 }
+
+export function postTeacherRequest(item) {
+    console.log("hello world before calling backend - POST teacher request - teacher name is  " + item.teacher_name)
+
+    const request = axios.post(host + '/api/teachers/requests',{ 
+        teacher_name: item.teacher_name,
+        teacher_email: item.teacher_email,
+        teacher_phone: item.teacher_phone,
+        url: item.url,
+        quantity_needed: parseInt(item.quantity_needed) ,
+        address: item.address,
+        place: item.place,
+        district: item.district,
+        state: item.state,
+        country: "India",
+        photo_link: "",
+        extra_info: "{}",
+        pincode: item.pincode}).then(function (response) {
+        console.log(response);
+      })
+
+    // return (dispatch) =>
+    //     request.then((response) => {
+    //         console.log('result=', response);
+    //             dispatch({
+    //                 type: DEFAULT,
+    //                 payload: response.data
+    //             })
+    //         }
+    //     );
+}
+
