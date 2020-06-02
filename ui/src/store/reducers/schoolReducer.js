@@ -6,6 +6,7 @@ const initialState ={
     dists: [],
     schoolsList: [],
     productsGroup: [],
+    postTeachersRequest:{}
 };
 
 const schoolReducer = function (state = initialState, action) {
@@ -72,13 +73,24 @@ const schoolReducer = function (state = initialState, action) {
                         url: action.payload[index].url,
                         image: "chair.jpg",
                         description: action.payload[index].description,
-                        dist: "tirunelVeli"
+                        dist: "tirunelveli"
                     })
                 }
                 return {...state,  productsGroup: productDetailList}
             } else {
                 return {...state,  productsGroup: action.payload}
             }
+        }
+        case Actions.POST_TEACHERS_REQUEST: {
+            
+            if (typeof action.payload.error != "undefined" ) {
+                console.log("POST teachers request reducer - error !" + action.payload.error)
+                return {...state,  postTeachersRequest: {status:"error",message:action.payload.error}}
+            } else {
+                console.log("POST teachers request reducer - success !" + action.payload)
+                return {...state,  postTeachersRequest: {status:"success",message:"Request submitted sucessfully"}}
+            }
+
         }
         default:
             console.log("school reducer - default")

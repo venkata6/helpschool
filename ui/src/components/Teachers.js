@@ -1,7 +1,7 @@
 import React, {useRef,  useState} from 'react';
 import {Col, Container, Form, Button} from "react-bootstrap";
 import Alert from 'react-bootstrap/Alert'
-import {useDispatch} from 'react-redux';
+import {useDispatch,useSelector} from 'react-redux';
 import * as Actions from './../store/actions';
 
 import Introduce from "./Introduce";
@@ -9,6 +9,8 @@ import Introduce from "./Introduce";
 function Teachers() {
 
   const dispatch = useDispatch();
+
+  const [status, setStatus] = useState("");
 
   const teacherNameRef = useRef(null)
   const teacherPhoneRef = useRef(null)
@@ -20,6 +22,7 @@ function Teachers() {
   const districtRef = useRef(null)
   const stateRef = useRef(null)
   const pincodeRef = useRef(null)
+  const postTeachersRequest = useSelector(({schoolReducer}) => schoolReducer.postTeachersRequest);
 
   // function handleChange(event) {
   //   alert(event.target.name + ":" + event.target.value )
@@ -46,7 +49,9 @@ function Teachers() {
         pincode: pincodeRef.current.value}
      
       console.log(item)  
-      Actions.postTeacherRequest(item);
+      dispatch(Actions.postTeacherRequest(item));
+      setStatus("success")
+      setStatus("failure")
 
       console.log("Submit clicked: ", event.target)
   }
@@ -64,6 +69,7 @@ function Teachers() {
                  5. Your request will be added to database and some donor will buy and send them to the headmaster of your school<br/>
                </p>
             </Alert>
+            {postTeachersRequest.status !== "success"  && (
             <Form  onSubmit={handleSubmit} >
             <Form.Row>
                 <Form.Group as={Col} controlId="formTeacherName">
@@ -122,7 +128,19 @@ function Teachers() {
               <Button variant="primary" type="submit" >
                 Submit
               </Button>
-            </Form> 
+              <p></p>
+              </Form> )}
+              {postTeachersRequest.status === "success"  && (     <Alert variant="success">
+                                                    <Alert.Heading>Success ! </Alert.Heading>
+                                                    {postTeachersRequest.message}
+                                                    </Alert>)}
+              {postTeachersRequest.status === "error"  && (     <Alert variant="dark">
+                                               <Alert.Heading>Failed :-(  </Alert.Heading>
+                                                {postTeachersRequest.message}
+                                               </Alert>)}
+
+
+            
         </Container>
         </section>
     );

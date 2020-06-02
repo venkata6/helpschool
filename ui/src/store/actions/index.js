@@ -4,7 +4,7 @@ export const GET_ALL_STATES = '[SCHOOL APP] GET ALL STATES';
 export const GET_DISTS_FROM_STATE = '[SCHOOL APP] GET DISTS FROM STATE';
 export const GET_SCHOOLS_FROM_DIST = '[SCHOOL APP] GET SCHOOLS FROM DIST';
 export const GET_PRODUCTS_GROUP = '[SCHOOL APP] GET PRODUCTS GROUP';
-export const DEFAULT = '[SCHOOL APP] DEFAULT';
+export const POST_TEACHERS_REQUEST = '[SCHOOL APP] POST TEACHERS REQUEST';
 
 const options = {
     headers: {'Access-Control-Allow-Origin': '*'}
@@ -104,18 +104,26 @@ export function postTeacherRequest(item) {
         country: "India",
         photo_link: "",
         extra_info: "{}",
-        pincode: item.pincode}).then(function (response) {
-        console.log(response);
-      })
-
-    // return (dispatch) =>
-    //     request.then((response) => {
-    //         console.log('result=', response);
-    //             dispatch({
-    //                 type: DEFAULT,
-    //                 payload: response.data
-    //             })
-    //         }
-    //     );
-}
-
+        pincode: item.pincode})
+ 
+    console.log("after POST")
+      
+    return (dispatch) =>
+        request.then((response) => {
+            console.log('result=', response);
+                dispatch({
+                    type: POST_TEACHERS_REQUEST,
+                    payload: response
+                })
+            }
+        ).catch(function (error) {
+            console.log('error=', error.response.data);
+            dispatch({
+                type: POST_TEACHERS_REQUEST,
+                payload: error.response.data
+            })
+        }).then(function () {
+            // always executed
+            console.log('always executes');
+          });;
+    }
