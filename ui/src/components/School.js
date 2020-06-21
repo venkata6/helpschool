@@ -132,7 +132,7 @@ function School() {
                         <Container>
                             <Row>
                             {schoolsList.length !==0  && (     <Alert variant="info">
-                            <Alert.Heading></Alert.Heading><b>School Address:</b> {schoolsList[schoolSupplyId].address}</Alert>)}
+                            <Alert.Heading></Alert.Heading><b>School Address:</b> Headmaster,{schoolsList[schoolSupplyId].name},{schoolsList[schoolSupplyId].address}</Alert>)}
                                 <Col sm={14} className="detailWrap">
                                     {productsGroup && productsGroup.length>0 && (
                                         <Table striped bordered hover size="sm" responsive>
@@ -143,7 +143,6 @@ function School() {
                                                 <th>Needed</th>
                                                 <th>Fulfilled</th>
                                                 <th>Description</th>
-                                                <th>Address</th>
                                                 <th>Posted At</th>
                                             </tr>
                                             </thead>
@@ -155,7 +154,6 @@ function School() {
                                                     <td className="text-center">{product.counts}</td>
                                                     <td className="text-center">{product.fulfilled}</td> 
                                                     <td>{product.description}</td>
-                                                    <td>{product.address}</td>
                                                     <td style={{minWidth: 100}}>{format(new Date(product.postedAt), "dd MMMM yyyy")}</td>
                                                 </tr>
                                             ))}

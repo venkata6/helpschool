@@ -51,6 +51,7 @@ const schoolReducer = function (state = initialState, action) {
                     schoolListFromBackend.push({
                         label: action.payload[index].name + "," + action.payload[index].place, 
                         schoolId:action.payload[index].school_id , id: index,
+                        name: action.payload[index].name,
                         address: action.payload[index].address})
                 }
                 return {...state,  schoolsList: schoolListFromBackend, productsGroup: []}
