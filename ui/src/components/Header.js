@@ -2,6 +2,7 @@ import React from 'react';
 import { Container, Nav, Navbar, NavItem} from "react-bootstrap";
 import { Route,HashRouter } from "react-router-dom";
 import Teachers from './Teachers';
+import FAQs from './FAQs';
 import Home from "./Home";
 
 function Header() {
@@ -21,11 +22,14 @@ function Header() {
                             <Nav className="mr-auto">
                                 <Nav.Link href="/teachers">Teachers</Nav.Link>
                             </Nav>
+                            <Nav className="mr-auto">
+                                <Nav.Link href="/faqs">FAQs</Nav.Link>
+                            </Nav>
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-            <div className="hero-wrap">
+            { !window.location.href.includes('faqs') && <div className="hero-wrap">
                 <div className="overlay"/>
                 <Container>
                     <div className="row no-gutters slider-text align-items-center justify-content-center"
@@ -37,10 +41,11 @@ function Header() {
                     </div>
                 </Container>
                 <div className="imageCredit">Image:istockcredit.com-<br/>vikram suryavanshi</div>
-            </div> 
+            </div>  }
             <div className="content">
             <Route exact path="/" component={Home}/>
             <Route path="/teachers" component={Teachers}/>
+            <Route path="/faqs" component={FAQs}/>
           </div>
         </>
     )

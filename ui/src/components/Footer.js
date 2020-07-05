@@ -12,7 +12,7 @@ function Footer() {
                     <Col sm={4} xs={12}>
                         <div className="ftco-footer-widget mb-4">
                             <h2 className="ftco-heading-2">About Us</h2>
-                            <p>A non-profit trying to connect donors to schools directly</p>
+                            <p>Just a website trying to connect donors to teachers/schools directly</p>
                         </div>
                     </Col>
                     <Col sm={4} xs={12}>

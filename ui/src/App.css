@@ -34,6 +34,10 @@ body {
 .block-18.color-1 {
   background: #f8f52d;
 }
+.faq.questions {
+  font-size: 20px;
+  font-style: italic;
+}
 .block-18.color-2 {
   background: #3dedfa;
 }
