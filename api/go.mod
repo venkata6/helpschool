@@ -8,7 +8,6 @@ require (
 	github.com/go-chi/docgen v1.0.5
 	github.com/go-chi/render v1.0.1
 	github.com/google/uuid v1.1.1
-	github.com/jackc/pgx v3.6.2+incompatible // indirect
-	github.com/jackc/pgx/v4 v4.4.1
+	github.com/jackc/pgx/v4 v4.18.2
 
 )
